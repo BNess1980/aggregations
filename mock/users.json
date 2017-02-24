@@ -1,0 +1,15 @@
+[{
+	"merchantID":"WX8557",
+	"name": "Rutgers",
+	"street_address": "195 University Ave",
+	"city": "Newark",
+	"zip": "07102",
+	"phone": "978-353-1766"
+}, {
+	"merchantID":"BC1291",
+	"name": "St. Peters Prep",
+	"street_address": "144 Grand St",
+	"city": "Jersey City",
+	"zip": "07302",
+	"phone": "201-547-6400"
+}]
