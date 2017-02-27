@@ -1,6 +1,6 @@
 "use strict";
-var mongoose = require('mongoose');
-var merchantSchema = new mongoose.Schema({
+var mongooseImports_1 = require('./mongooseImports');
+var merchantSchema = new mongooseImports_1.mongoose.Schema({
     _id: String,
     name: String,
     street_address: String,
@@ -8,5 +8,5 @@ var merchantSchema = new mongoose.Schema({
     zip: String,
     phone: String
 });
-module.exports = mongoose.model('Merchant', merchantSchema, 'merchants');
+module.exports = mongooseImports_1.mongoose.model('Merchant', merchantSchema, 'merchants');
 //# sourceMappingURL=C:/Users/brucen/Personal/aggregations/server/models/merchant.js.map

@@ -1,4 +1,4 @@
-import mongoose = require('mongoose');
+import {mongoose} from './mongooseImports';
 
 const merchantSchema = new mongoose.Schema({
 	_id: String,

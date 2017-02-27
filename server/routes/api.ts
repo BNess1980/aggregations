@@ -18,9 +18,11 @@ router.use(function(req,res,next) {
 });
 
 /*GET api listening*/
+/*
 router.get('/', (req,res) => {
 	res.send('api works');
 });
+*/
 
 /*Sample data coming straight from json file*/
 router.get('/mock', (req,res) => {

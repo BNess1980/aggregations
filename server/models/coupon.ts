@@ -1,5 +1,4 @@
-let mongooseWithDBL = require('mongoose')
-require('mongoose-double')(mongooseWithDBL); 
+import {mongooseWithDBL} from './mongooseImports';
 
 let SchemaTypes = mongooseWithDBL.Schema.Types;
 

@@ -1,7 +1,7 @@
-var mongooseWithDBL = require('mongoose');
-require('mongoose-double')(mongooseWithDBL);
-var SchemaTypes = mongooseWithDBL.Schema.Types;
-var couponSchema = new mongooseWithDBL.Schema({
+"use strict";
+var mongooseImports_1 = require('./mongooseImports');
+var SchemaTypes = mongooseImports_1.mongooseWithDBL.Schema.Types;
+var couponSchema = new mongooseImports_1.mongooseWithDBL.Schema({
     _id: String,
     name: String,
     merchant: String,
@@ -9,5 +9,5 @@ var couponSchema = new mongooseWithDBL.Schema({
     qty: Number,
     amt: SchemaTypes.Double
 });
-module.exports = mongooseWithDBL.model('Coupon', couponSchema, 'validations');
+module.exports = mongooseImports_1.mongooseWithDBL.model('Coupon', couponSchema, 'validations');
 //# sourceMappingURL=C:/Users/brucen/Personal/aggregations/server/models/coupon.js.map
