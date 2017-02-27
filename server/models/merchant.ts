@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose = require('mongoose');
 
-const merchantSchema = new Schema({
+const merchantSchema = new mongoose.Schema({
 	_id: String,
 	name: String,
 	street_address: String,
@@ -10,4 +9,4 @@ const merchantSchema = new Schema({
 	phone: String
 });
 
-module.exports = mongoose.model('Merchant', merchantSchema);
+module.exports = mongoose.model('Merchant',merchantSchema,'merchants');
