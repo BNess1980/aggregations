@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var merchantSchema = new Schema({
-    merchantID: String,
+    _id: String,
     name: String,
     street_address: String,
     city: String,

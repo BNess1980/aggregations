@@ -3,14 +3,21 @@ const router = express.Router();
 const mock = require('../../mock/users');
 const Merchant = require('../models/merchant');
 const mongoose = require('mongoose');
+const merchantsDB:string = 'mongodb://localhost:27017/users';
+//const validationsDB:string = 'mongodb://localhost:27017/validations';
 
-const dbURI:string = 'mongodb://localhost:27017/users';
-
-mongoose.connect(dbURI, function(err) {
+mongoose.connect(merchantsDB, function(err) {
 	if(err)
 		throw err
-	console.log('Successfully connected to database');		
+	console.log(`Successfully connected to database ${merchantsDB}`);		
 }); // connect to local db
+/*
+mongoose.connect(validationsDB, function(err) {
+	if(err)
+		throw err
+	console.log(`Successfully connected to database ${validationsDB}`);		
+}); // connect to local db
+*/
 
 router.use(function(req,res,next) {
 	console.log('CRUD operation is occuring');
@@ -33,7 +40,7 @@ router.route('/merchants')
 	.post(function(req,res) {
 
         const merchant = new Merchant();      // create a new instance of the Bear model
-        merchant.merchantID = req.body.merchantID;
+        merchant._id = req.body._id;
         merchant.name = req.body.name;  // set the merchants name (comes from the request)
         merchant.street_address = req.body.street_address;
         merchant.city = req.body.city;
@@ -77,7 +84,7 @@ router.route('/merchants/:_id')
         	if(err)
         		res.send(err);
         	
-	        Merchant.merchantID = req.body.merchantID;
+	        Merchant._id = req.body._id;
 	        Merchant.name = req.body.name;  // set the merchants name (comes from the request)
 	        Merchant.street_address = req.body.street_address;
 	        Merchant.city = req.body.city;
@@ -105,17 +112,5 @@ router.route('/merchants/:_id')
     		res.json({ message: 'Merchant succesfully deleted!'});
     	})
     });
-
-router.route('/merchants/ID/:merchantId')
-
-   	// GET merchant with id that matches param :merchantID
-    .get(function(req,res) {
-    	Merchant.find({merchantID: req.params.merchantID}, function(err, data) {
-        	if(err)
-        		res.send(err);
-        	res.json(data);
-        });
-    });
-	
 
 module.exports = router;

@@ -1,0 +1,20 @@
+Create db
+use databaseName
+
+Create collection
+db.databasename.createCollection("collectionName")
+
+View collections in unminified json
+use databasename
+db.collectionName.find().pretty()
+
+Importing -
+mongoimport --db databaseName --collection collectionName filename --jsonArray
+
+Drop Database
+use databaseName
+db.dropDatabase();
+
+Drop Collectection
+use databasename
+db.collectionName.drop()
