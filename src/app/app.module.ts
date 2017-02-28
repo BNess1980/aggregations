@@ -6,28 +6,33 @@ import { HttpModule } from '@angular/http';
 // Use RouterModule to set up routes
 import { RouterModule } from '@angular/router';
 
-import { AppComponent } from './app.component';
-import { MerchantsComponent } from './merchants/merchants.component';
-
 // Importing service genergated with ng generate service
 import { MerchantService } from './merchants.service';
+
+import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { MerchantsComponent } from './merchants/merchants.component';
+import { NavComponent } from './nav/nav.component';
+
 // Create ROUTES object
 const ROUTES = [
   {
     path:'',
-    redirectTo:'merchants',
+    redirectTo:'login',
     pathMatch:'full'
   },
   {
-    path:'merchants',
-    component: MerchantsComponent
+    path:'login',
+    component: LoginComponent
   }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    MerchantsComponent
+    MerchantsComponent,
+    LoginComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
