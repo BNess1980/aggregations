@@ -6,6 +6,10 @@ const Coupon = require('../models/coupon');
 const mongoose = require('mongoose');
 const uriDB:string = 'mongodb://localhost:27017/users';
 
+// For uploading avatar images
+const multer = require('multer');
+const upload = multer({ dest: '../src/uploads' });
+
 mongoose.connect(uriDB, function(err) {
 	if(err)
 		throw err
@@ -18,11 +22,9 @@ router.use(function(req,res,next) {
 });
 
 /*GET api listening*/
-/*
 router.get('/', (req,res) => {
 	res.send('api works');
 });
-*/
 
 /*Sample data coming straight from json file*/
 router.get('/mock', (req,res) => {

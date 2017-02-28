@@ -5,6 +5,9 @@ var Merchant = require('../models/merchant');
 var Coupon = require('../models/coupon');
 var mongoose = require('mongoose');
 var uriDB = 'mongodb://localhost:27017/users';
+// For uploading avatar images
+var multer = require('multer');
+var upload = multer({ dest: '../src/uploads' });
 mongoose.connect(uriDB, function (err) {
     if (err)
         throw err;
