@@ -1,3 +1,30 @@
+Install Mongo but change destination to something other than C:\Program Files
+Make MonogDB run as Window Service with the following steps
+
+create a data folder with a nested db folder in the root of the mongod directory created after installation; so if you installed on C:\ then this would look like
+C:/mongod/data/db
+
+create a log directory in the same level as data
+C:/mongod/log
+
+create a file called mongod.cfg and add these settings (spaces are important since this is yaml)
+systemLog:
+    destination: file
+    path: c:\mongodb\log\mongodb.log
+storage:
+    dbPath: c:\mongodb\data\db
+
+Run this cmd in a administrator prompt
+"C:\mongodb\bin\mongod.exe" --config "C:\mongodb\mongod.cfg"  --logpath "C:\mongodb\log\mongodb.log" --logappend --rest --install
+
+Type system environment variables in windows finder, click on environemnt variables and add our c:\mongodb\bin; location to "Path" variable
+
+
+Now when starting mongo launch a cmd prompt *as administrator(you must do this) and run net start MongoDB
+Then in a seperate command run mongo as normal. Use net stop MongoDB to stop the service.
+
+----------------------------------------------------------------------------------------------
+
 Create db
 use databaseName
 

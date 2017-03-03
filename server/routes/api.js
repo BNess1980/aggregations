@@ -25,23 +25,30 @@ router.get('/', function (req, res) {
 router.get('/mock', function (req, res) {
     res.send(mock);
 });
-// On routes the end with /merchants
-router.route('/merchants')
-    .post(function (req, res) {
+router.route('/register')
+    .post(function (req, res, next) {
     var merchant = new Merchant(); // create a new instance of the merchant model
-    merchant._id = req.body._id;
-    merchant.name = req.body.name; // set the merchants name (comes from the request)
+    //merchant._id = req.body._id;
+    console.log(req.body.account);
+    merchant.account = req.body.account; // set the merchants name (comes from the request)
+    merchant.account = req.body.username;
+    merchant.password = req.body.password;
     merchant.street_address = req.body.street_address;
     merchant.city = req.body.city;
     merchant.zip = req.body.zip;
+    merchant.state = req.body.state;
     merchant.phone = req.body.phone;
+    merchant.contact_name = req.body.contact_name;
+    merchant.contact_email = req.body.contact_email;
     // save the merchant and check for errors
     merchant.save(function (err) {
         if (err)
             res.send(err);
         res.json({ message: 'New Merchant created!' });
     });
-})
+});
+// On routes the end with /merchants
+router.route('/merchants')
     .get(function (req, res) {
     Merchant.find(function (err, data) {
         if (err)
@@ -61,12 +68,17 @@ router.route('/merchants/:_id')
     Merchant.findById(req.params._id, function (err, data) {
         if (err)
             res.send(err);
-        Merchant._id = req.body._id;
-        Merchant.name = req.body.name; // set the merchants name (comes from the request)
+        //Merchant._id = req.body._id;
+        Merchant.name = req.body.account; // set the merchants name (comes from the request)
+        Merchant.name = req.body.username;
+        Merchant.password = req.body.password;
         Merchant.street_address = req.body.street_address;
         Merchant.city = req.body.city;
         Merchant.zip = req.body.zip;
+        Merchant.state = req.body.state;
         Merchant.phone = req.body.phone;
+        Merchant.contact_name = req.body.contact_name;
+        Merchant.contact_email = req.body.contact_email;
         Merchant.save(function () {
             if (err)
                 res.send(err);
@@ -126,6 +138,10 @@ router.route('/coupons/:_id')
             res.send(err);
         res.json({ message: 'Coupon successfully deleted!' });
     });
+});
+/*Sample data coming straight from json file*/
+router.get('/register', function (req, res, next) {
+    res.render('register');
 });
 module.exports = router;
 //# sourceMappingURL=C:/Users/brucen/Personal/aggregations/server/routes/api.js.map

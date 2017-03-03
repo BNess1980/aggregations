@@ -1,18 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Use RouterModule to set up routes
 import { RouterModule } from '@angular/router';
 
 // Importing service genergated with ng generate service
 import { MerchantService } from './merchants.service';
+import { StatesService } from './states.service';
+import { RegisterService } from './register.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MerchantsComponent } from './merchants/merchants.component';
 import { NavComponent } from './nav/nav.component';
+import { RegisterComponent } from './register/register.component';
 
 // Create ROUTES object
 const ROUTES = [
@@ -24,7 +27,15 @@ const ROUTES = [
   {
     path:'login',
     component: LoginComponent
-  }
+  },
+  {
+    path:'merchants',
+    component: MerchantsComponent
+  },
+  {
+    path:'register',
+    component: RegisterComponent
+  }  
 ];
 
 @NgModule({
@@ -32,15 +43,17 @@ const ROUTES = [
     AppComponent,
     MerchantsComponent,
     LoginComponent,
-    NavComponent
+    NavComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES) // Add routes to the app
+    ReactiveFormsModule,
+    RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [MerchantService],
+  providers: [MerchantService,StatesService,RegisterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

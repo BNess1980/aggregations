@@ -1,0 +1,61 @@
+<div class="mt-5">
+    <div class="container">
+        <form [formGroup]="regForm" novalidate class="form-horizontal form-register" (ngSubmit)="registerUser(regForm.value,regForm.valid)">
+            <div class="form-group">
+                <label for="accountName" class="control-label">Account Name*</label>
+                <input type="text" class="form-control" id="accountName" placeholder="Create an Account Name" formControlName="account" />
+                <small [hidden]="regForm.controls.account.valid || (regForm.controls.account.pristine && !submitted)" class="text-danger">*Account Name is required</small>
+            </div>
+            <div class="form-group">
+                <label for="username" class="control-label">Username*</label>
+                <input type="text" class="form-control" id="username" placeholder="Create a Username" formControlName="username" />
+                <small [hidden]="regForm.controls.username.valid || (regForm.controls.username.pristine && !submitted)" class="text-danger">*You must create a Username</small>          
+            </div>                         
+            <div class="form-group">
+                <label for="registerPassword" class="control-label">Password*</label>
+                <input type="password" class="form-control" id="registerPassword" placeholder="Create a Password"  formControlName="password" />
+                <small [hidden]="regForm.controls.password.valid || (regForm.controls.password.pristine && !submitted)" class="text-danger">*You must create a Password</small>             
+            </div>
+            <div class="form-group">
+                <label for="street_address" class="control-label">Street Address*</label>
+                <input type="text" class="form-control" id="street_address" placeholder="Street Address"  formControlName="street_address" />
+                <small [hidden]="regForm.controls.street_address.valid || (regForm.controls.street_address.pristine && !submitted)" class="text-danger">*Street Address is required</small>              
+            </div>    
+            <div class="form-group">
+                <label for="city" class="control-label">City*</label>
+                <input type="text" class="form-control" id="city" placeholder="City" formControlName="city"/>
+                <small [hidden]="regForm.controls.city.valid || (regForm.controls.city.pristine && !submitted)" class="text-danger">*City is required</small>              
+            </div>       
+            <div class="form-group">
+                <label for="state" class="control-label">*State</label>
+                <select class="form-control" id="state" formControlName="state">
+                    <option *ngFor="let state of states">{{ state.abbreviation }}</option>
+                </select>
+                <small [hidden]="regForm.controls.state || (regForm.controls.state.pristine && !submitted)" class="text-danger">*State is required</small>              
+            </div>
+            <div class="form-group">
+                <label for="zip" class="control-label">Zip*</label>
+                <input type="text" class="form-control" id="zip" placeholder="Zip Code" formControlName="zip" />
+                <small [hidden]="regForm.controls.zip || (regForm.controls.zip.pristine && !submitted)" class="text-danger">*Zip is required</small>                
+            </div>         
+            <div class="form-group">
+              <label for="phone" class="control-label">Phone*</label>
+                <input class="form-control" type="tel" id="phone" placeholder="i.e. - XXX-XXX-XXXX" formControlName="phone">
+                <small [hidden]="regForm.controls.phone || (regForm.controls.phone.pristine && !submitted)" class="text-danger">*Phone is required</small>            
+            </div>
+            <div class="form-group">
+                <label for="contact_name" class="control-label">Contact Name*</label>
+                <input type="text" class="form-control" id="contact_name" placeholder="Contact Name" formControlName="contact_name" />
+                <small [hidden]="regForm.controls.contact_name || (regForm.controls.contact_name.pristine && !submitted)" class="text-danger">*Contact name is required</small>            
+            </div>
+            <div class="form-group">
+                <label for="contact_email" class="control-label">Contact Email*</label>
+                <input type="email" class="form-control" id="contact_email" placeholder="Contact Email" formControlName="contact_email" />
+                <small [hidden]="regForm.controls.contact_email || (regForm.controls.contact_email.pristine && !submitted)" class="text-danger">*Contact email is required</small>               
+            </div>                               
+            
+            <button type="submit" class="mt-4 btn btn-lg submit-btn">Submit</button>
+          
+        </form>
+    </div>
+</div>
