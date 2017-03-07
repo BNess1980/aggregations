@@ -10,6 +10,8 @@ import { RouterModule } from '@angular/router';
 import { MerchantService } from './merchants.service';
 import { StatesService } from './states.service';
 import { RegisterService } from './register.service';
+import { LoginService } from './login.service';
+import { ValidationsService } from './validations.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -53,7 +55,7 @@ const ROUTES = [
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [MerchantService,StatesService,RegisterService],
+  providers: [MerchantService,StatesService,RegisterService,LoginService,ValidationsService], // YOU MUST ADD ALL SERVICES HERE
   bootstrap: [AppComponent]
 })
 export class AppModule { }

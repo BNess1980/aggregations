@@ -1,3 +1,5 @@
+<div class="alert alert-success" *ngIf="showRegMsg">You have successfully registered</div>
+
 <div class="mt-5">
     <div class="container">
         <form [formGroup]="regForm" novalidate class="form-horizontal form-register" (ngSubmit)="registerUser(regForm.value,regForm.valid)">
@@ -37,11 +39,16 @@
                 <label for="zip" class="control-label">Zip*</label>
                 <input type="text" class="form-control" id="zip" placeholder="Zip Code" formControlName="zip" />
                 <small [hidden]="regForm.controls.zip || (regForm.controls.zip.pristine && !submitted)" class="text-danger">*Zip is required</small>                
-            </div>         
+            </div>
+            <div class="form-group">
+                <label for="zip" class="control-label">Merchant Number*</label>
+                <input type="text" class="form-control" id="zip" placeholder="Merchant Number" formControlName="merchant_number" />
+                <small [hidden]="regForm.controls.merchant_number || (regForm.controls.merchant_number.pristine && !submitted)" class="text-danger">*Merchant number is required</small>                
+            </div>                      
             <div class="form-group">
               <label for="phone" class="control-label">Phone*</label>
                 <input class="form-control" type="tel" id="phone" placeholder="i.e. - XXX-XXX-XXXX" formControlName="phone">
-                <small [hidden]="regForm.controls.phone || (regForm.controls.phone.pristine && !submitted)" class="text-danger">*Phone is required</small>            
+                <small [hidden]="regForm.controls.phone || (regForm.controls.phone.pristine && !submitted)" class="text-danger">*Phone is required</small>           
             </div>
             <div class="form-group">
                 <label for="contact_name" class="control-label">Contact Name*</label>

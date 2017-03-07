@@ -6,15 +6,18 @@ const Coupon = require('../models/coupon');
 const mongoose = require('mongoose');
 const uriDB:string = 'mongodb://localhost:27017/users';
 
-// For uploading avatar images
-const multer = require('multer');
-const upload = multer({ dest: '../src/uploads' });
+// PassportJS
+const passport = require('passport');
 
+// Mongoose/Mongo database connection
 mongoose.connect(uriDB, function(err) {
 	if(err)
 		throw err
 	console.log(`Successfully connected to database ${uriDB}`);		
 }); // connect to local db
+
+
+/*************** Server Routes ****************/
 
 router.use(function(req,res,next) {
 	console.log('CRUD operation is occuring');
@@ -26,11 +29,14 @@ router.get('/', (req,res) => {
 	res.send('api works');
 });
 
-/*Sample data coming straight from json file*/
-router.get('/mock', (req,res) => {
-	res.send(mock);
-});
+// Login routes
+router.route('/login')
+    .post(passport.authenticate('local-login', {
+        succcessRedirect: '/merchants',
+        failureRedirect: '/login'
+    }));
 
+// Register route
 router.route('/register')
     // POST create a new merchant
     .post(function(req,res,next) {
@@ -40,7 +46,7 @@ router.route('/register')
         console.log(req.body.account);
         merchant.account = req.body.account;  // set the merchants name (comes from the request)
         merchant.account = req.body.username;
-        merchant.password = req.body.password;        
+        merchant.password = req.body.password;       
         merchant.street_address = req.body.street_address;
         merchant.city = req.body.city;
         merchant.zip = req.body.zip;
@@ -55,6 +61,9 @@ router.route('/register')
 
              res.json({ message: 'New Merchant created!' });
         });
+
+        res.location('/');
+        res.redirect('/');
 
     });        
 
@@ -122,71 +131,5 @@ router.route('/merchants/:_id')
     		res.json({ message: 'Merchant successfully deleted!'});
     	})
     });
-
-
-// On routes the end with /coupons
-router.route('/coupons')
-    
-       // GET all coupons
-    .get(function(req,res) {
-        Coupon.find(function(err, data) {
-            if(err)
-                res.send(err);
-            res.json(data);
-        });
-    });    
-
-router.route('/coupons/:_id')
-
-       // GET coupon with mongo id that matches param :_id
-    .get(function(req,res) {
-        Coupon.findById(req.params._id, function(err, data) {
-            if(err)
-                res.send(err);
-            console.log(data);
-            res.json(data);
-        });
-    })
-
-    // Update coupon with
-    .put(function(req,res) {
-
-        Coupon.findById(req.params._id, function(err, data) {
-            if(err)
-                res.send(err);
-            
-            Coupon._id = req.body._id;
-            Coupon.name = req.body.name;  // set the merchants name (comes from the request)
-            Coupon.merchant = req.body.merchant;
-            Coupon.merchantID = req.body.merchantID;
-            Coupon.qty = req.body.qty;
-            Coupon.amt = req.body.amt;
-
-            Coupon.save(function() {
-                if(err)
-                    res.send(err);
-
-                res.json({ message: 'Coupon successfully updated!'});
-            });
-
-
-        });
-
-    })
-
-    .delete(function(req, res) {
-        Coupon.remove({
-            _id:req.params._id
-        }, function (err, data) {
-            if(err)
-                res.send(err);
-            res.json({ message: 'Coupon successfully deleted!'});
-        })
-    });
-
-/*Sample data coming straight from json file*/
-router.get('/register', (req,res,next) => {
-    res.render('register');
-});
 
 module.exports = router;

@@ -1,18 +1,15 @@
 const express = require('express');
+const app = express();
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
-const api = require('./server/routes/api'); // Where CRUD routes exist
-const app = express();
 
-// includes for login module
+// constants for login module
 const session = require('express-session');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const api = require('./server/routes/api');
 
-// For login messaging
-const flash = require('connect-flash');
-const expressValidator = require('express-validator');
+require('./config/passport')(passport); // pass passport for configuration
 
 // Parsers for POST data
 app.use(bodyParser.json());
@@ -21,44 +18,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Set our api routes
-app.use('/api', api);
-
 // Handle sessions
 app.use(session({
-	secret: 'secret',
-	saveUninitialized: true,
-	resave: true
+  secret: 'edisonllc',
+  saveUninitialized: true,
+  resave: true
 }));
 
-// Passport
+// PassportJS
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Field Validation
-app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
-
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
-}));
-
-// Connect-Flash & Express Messaging
-app.use(require('connect-flash')());
-app.use(function(req,res,next) {
-	res.locals.messages = require('express-messages')(req,res);
-	next();
-});
+// Set our api routes
+app.use('/api', api);
 
 // Catch all other routes and return the index file
 app.get('*', (req,res) => {

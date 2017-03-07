@@ -1,8 +1,8 @@
 <div class="mt-4 container">
-  <h2 class="mt-2 mb-2">Welcome Merchants</h2>
+  <h4 class="mt-2 mb-2">Current Merchants</h4>
   <div class="row" *ngFor="let merchant of merchants">
     <div class="mt-3 card card-block">
-      <h4 class="card-title">{{ merchant.account }}</h4>
+      <h3 class="card-title">{{ merchant.account }}</h3>
       <p class="card-text">{{merchant.street_address}}</p>
       <p class="card-text">{{merchant.city}}</p>
       <p class="card-text">{{merchant.zip}}</p>

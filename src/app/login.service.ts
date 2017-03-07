@@ -8,16 +8,17 @@ import { merchantClient } from '../../server/models/merchant';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class RegisterService {
+export class LoginService {
 
   constructor(private http: Http) { }
 
-  registerMerchant(body: Object): Observable<merchantClient[]>{
+  login(body: Object): Observable<merchantClient[]>{
   	let bodyStr = JSON.stringify(body);
   	let headers = new Headers({ 'Content-Type': 'application/json' });
-  		return this.http.post('/api/register/', bodyStr, <RequestOptionsArgs> {headers: headers, withCredentials: true})
-  		.map((res: Response) => res.json())
-  		.catch((error:any) => Observable.throw(error.json().error || 'Server Error'));
-  }
+
+    return this.http.post('/api/login/', bodyStr, <RequestOptionsArgs> {headers: headers, withCredentials: true})
+        .map((res: Response) => res)
+        .catch((error:any) => Observable.throw(error.json().error || 'Server Error'));
+  	}
 
 }
