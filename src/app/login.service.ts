@@ -15,10 +15,8 @@ export class LoginService {
   login(body: Object): Observable<merchantClient[]>{
   	let bodyStr = JSON.stringify(body);
   	let headers = new Headers({ 'Content-Type': 'application/json' });
-
-    return this.http.post('/api/login/', bodyStr, <RequestOptionsArgs> {headers: headers, withCredentials: true})
+    return this.http.post('/api/login', bodyStr, <RequestOptionsArgs> {headers: headers, withCredentials: true})
         .map((res: Response) => res)
         .catch((error:any) => Observable.throw(error.json().error || 'Server Error'));
   	}
-
 }

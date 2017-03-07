@@ -43,7 +43,7 @@ module.exports = function(passport) {
 
         // find a Merchant whose username is the same as the form's username
         // we are checking to see if the Merchant trying to login already exists
-        merchantSchema.findOne({ 'local.username' :  username }, function(err, user) {
+        merchantSchema.findOne({ 'username' :  username }, function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
@@ -58,8 +58,8 @@ module.exports = function(passport) {
                 var newMerchant = new merchantSchema();
 
                 // set the Merchant's local credentials
-                newMerchant.local.username = username;
-                newMerchant.local.password = newMerchant.generateHash(password); // use the generateHash function in our Merchant model
+                newMerchant.username = username;
+                newMerchant.password = newMerchant.generateHash(password); // use the generateHash function in our Merchant model
 
                 // save the Merchant
                 newMerchant.save(function(err) {
@@ -89,7 +89,7 @@ module.exports = function(passport) {
 
         // find a Merchant whose email is the same as the forms email
         // we are checking to see if the Merchant trying to login already exists
-        merchantSchema.findOne({ 'local.username' :  username }, function(err, user) {
+        merchantSchema.findOne({ 'username' :  username }, function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -103,7 +103,7 @@ module.exports = function(passport) {
                 return done(null, false, console.log('Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
             // all is well, return successful Merchant
-            return done(null, user);
+            return done(null, user, console.log(user));
         });
 
     }));

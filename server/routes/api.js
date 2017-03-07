@@ -7,6 +7,8 @@ var mongoose = require('mongoose');
 var uriDB = 'mongodb://localhost:27017/users';
 // PassportJS
 var passport = require('passport');
+// Hash password on registration
+var passwordHash = require('password-hash');
 // Mongoose/Mongo database connection
 mongoose.connect(uriDB, function (err) {
     if (err)
@@ -31,12 +33,14 @@ router.route('/login')
 // Register route
 router.route('/register')
     .post(function (req, res, next) {
+    var plainPassword = req.body.password;
+    var hashedPassword = passwordHash.generate(plainPassword);
     var merchant = new Merchant(); // create a new instance of the merchant model
     //merchant._id = req.body._id;
     console.log(req.body.account);
     merchant.account = req.body.account; // set the merchants name (comes from the request)
     merchant.account = req.body.username;
-    merchant.password = req.body.password;
+    merchant.password = hashedPassword;
     merchant.street_address = req.body.street_address;
     merchant.city = req.body.city;
     merchant.zip = req.body.zip;
