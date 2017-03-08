@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { loggedUser } from './login.interface';
-import { LoginService } from '../login.service';
+import { LoginService } from '../shared/login.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { merchantClient } from '../../../server/models/merchant';
 import { Router } from '@angular/router';
@@ -26,14 +26,14 @@ export class LoginComponent implements OnInit {
 
   loginUser(model: merchantClient, isValid:boolean) {
     this.loggedIn = true;
-    console.log(model);
-    this._loginService.login(model).subscribe(merchant => {
-      console.log(merchant);
+    this._loginService.login(model).subscribe(data => {
+      console.log(data._id);
       this._router.navigate(['/merchants']);
     }, error => {
       this.loggedIn = false;
       console.log('Returned '+this.loggedIn+'\n Error in loggging in '+error);
     });
+
   }
 
 }

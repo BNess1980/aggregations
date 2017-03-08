@@ -26,10 +26,19 @@ router.get('/', function (req, res) {
 });
 // Login routes
 router.route('/login')
-    .post(passport.authenticate('local-login', {
-    succcessRedirect: '/merchants',
-    failureRedirect: '/login'
-}));
+    .post(function (req, res, next) {
+    passport.authenticate('local-login', function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (user === false) {
+            res.status(401).send('Server Error in login');
+        }
+        else {
+            res.json(user);
+        }
+    })(req, res, next);
+});
 // Register route
 router.route('/register')
     .post(function (req, res, next) {

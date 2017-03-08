@@ -1,0 +1,25 @@
+[{
+	"account": "Rutgers",
+	"username":"RUcollege",
+	"password":"1925",	
+	"street_address": "195 University Ave",
+	"city": "Newark",
+	"state":"NJ",	
+	"zip": "07102",
+	"merchant_number":"1",
+	"phone": "978-353-1766",
+	"contact_name":"Bruce Ness",
+	"contact_email":"rutgers@edu.com"
+}, {
+	"account": "St. Peters Prep",
+	"username": "spprep",
+	"password":"1872",	
+	"street_address": "144 Grand St",
+	"city": "Jersey City",
+	"state":"NJ",
+	"zip": "07302",
+	"merchant_number":"2",
+	"phone": "201-547-6400",
+	"contact_name":"Bruce Ness",	
+	"contact_email":"spprep@edu.com"		
+}]

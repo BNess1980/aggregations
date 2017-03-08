@@ -7,17 +7,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // Importing service genergated with ng generate service
-import { MerchantService } from './merchants.service';
-import { StatesService } from './states.service';
-import { RegisterService } from './register.service';
-import { LoginService } from './login.service';
-import { ValidationsService } from './validations.service';
+import { MerchantService } from './shared/merchants.service';
+import { StatesService } from './shared/states.service';
+import { RegisterService } from './shared/register.service';
+import { LoginService } from './shared/login.service';
+import { ValidationsService } from './shared/validations.service';
+import { ProfileService } from './shared/profile.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MerchantsComponent } from './merchants/merchants.component';
 import { NavComponent } from './nav/nav.component';
 import { RegisterComponent } from './register/register.component';
+import { ProfileComponent } from './profile/profile.component';
 
 // Create ROUTES object
 const ROUTES = [
@@ -46,7 +48,8 @@ const ROUTES = [
     MerchantsComponent,
     LoginComponent,
     NavComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,7 @@ const ROUTES = [
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [MerchantService,StatesService,RegisterService,LoginService,ValidationsService], // YOU MUST ADD ALL SERVICES HERE
+  providers: [MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService], // YOU MUST ADD ALL SERVICES HERE
   bootstrap: [AppComponent]
 })
 export class AppModule { }

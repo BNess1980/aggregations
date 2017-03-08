@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { StatesService } from '../states.service';
-import { RegisterService } from '../register.service';
-import { ValidationsService } from '../validations.service';
+import { StatesService } from '../shared/states.service';
+import { RegisterService } from '../shared/register.service';
+import { ValidationsService } from '../shared/validations.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Rx';
 import { merchantClient } from '../../../server/models/merchant';
