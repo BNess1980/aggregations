@@ -25,7 +25,7 @@ export class LoginService {
   }
 
   redirectToMerchant(id) {
-  	this._router.navigate(['/merchants',{id : id}])
+  	this._router.navigate(['/profile',id])
   	console.log('From redirectToMerchant: '+id);
   }
 

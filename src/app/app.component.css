@@ -57,4 +57,7 @@ body {
   color: #fdcb34;
 }
 
+h4.heading{color:#fdcb34;font-family:'Roboto', Arial, sans-serif;}
+.card{background-color:#fdcb34;color:black;}
+
 .login-btn,.submit-btn{background-color:#000;border:2px solid #fdcb34;color:white;font-family:"Ubuntu", Arial, sans-serif;}
