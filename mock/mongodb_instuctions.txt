@@ -35,6 +35,12 @@ View collections in unminified json
 use databasename
 db.collectionName.find().pretty()
 
+View databases
+show dbs
+
+View collections
+show collections
+
 Importing -
 mongoimport --db databaseName --collection collectionName filename --jsonArray
 

@@ -1,4 +1,5 @@
 [{
+	"_id":"WX5DCE",
 	"account": "Rutgers",
 	"username":"RUcollege",
 	"password":"1925",	
@@ -7,10 +8,15 @@
 	"state":"NJ",	
 	"zip": "07102",
 	"merchant_number":"1",
+	"validations": {
+		"1/2 Off Daily":[{"barcode":"","rate":""}],
+		"75% Weekend":[{"barcode":"","rate":""}]
+	},
 	"phone": "978-353-1766",
 	"contact_name":"Bruce Ness",
 	"contact_email":"rutgers@edu.com"
 }, {
+	"_id":"C441UY",	
 	"account": "St. Peters Prep",
 	"username": "spprep",
 	"password":"1872",	
@@ -18,7 +24,11 @@
 	"city": "Jersey City",
 	"state":"NJ",
 	"zip": "07302",
-	"merchant_number":"2",
+	"merchant_number":"2",	
+	"validations": {
+		"1/2 Off Daily":[{"barcode":"","rate":""}],
+		"75% Weekend":[{"barcode":"","rate":""}]
+	},	
 	"phone": "201-547-6400",
 	"contact_name":"Bruce Ness",	
 	"contact_email":"spprep@edu.com"		

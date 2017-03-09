@@ -146,4 +146,13 @@ router.route('/merchants/:_id')
     	})
     });
 
+router.route('/profile/:_id')
+    .get(function(req,res) {
+        Merchant.findById(req.params._id, function(err, data) {
+            if(err)
+                res.send(err);
+            res.json(data);
+        });
+    })   
+
 module.exports = router;

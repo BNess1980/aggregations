@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Use RouterModule to set up routes
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 // Importing service genergated with ng generate service
 import { MerchantService } from './shared/merchants.service';
@@ -37,8 +37,16 @@ const ROUTES = [
     component: MerchantsComponent
   },
   {
+    path:'merchants/:id',
+    component: MerchantsComponent
+  },    
+  {
     path:'register',
     component: RegisterComponent
+  },
+  {
+    path: 'profile/:id',
+    component: ProfileComponent
   }  
 ];
 

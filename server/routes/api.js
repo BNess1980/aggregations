@@ -114,5 +114,13 @@ router.route('/merchants/:_id')
         res.json({ message: 'Merchant successfully deleted!' });
     });
 });
+router.route('/profile/:_id')
+    .get(function (req, res) {
+    Merchant.findById(req.params._id, function (err, data) {
+        if (err)
+            res.send(err);
+        res.json(data);
+    });
+});
 module.exports = router;
 //# sourceMappingURL=C:/Users/brucen/Personal/aggregations/server/routes/api.js.map
