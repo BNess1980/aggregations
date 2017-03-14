@@ -7,12 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 // Importing service genergated with ng generate service
+import { NavigationService } from './shared/navigation.service';
 import { MerchantService } from './shared/merchants.service';
 import { StatesService } from './shared/states.service';
 import { RegisterService } from './shared/register.service';
 import { LoginService } from './shared/login.service';
 import { ValidationsService } from './shared/validations.service';
 import { ProfileService } from './shared/profile.service';
+
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -66,7 +68,7 @@ const ROUTES = [
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService], // YOU MUST ADD ALL SERVICES HERE
+  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService], // YOU MUST ADD ALL SERVICES HERE
   bootstrap: [AppComponent]
 })
 export class AppModule { }

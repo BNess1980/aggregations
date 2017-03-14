@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NavigationService } from '../shared/navigation.service';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-nav',
@@ -7,11 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  brandTitle:string = 'PARKFAST Validations';
+  public brandTitle:string = 'PARKFAST Validations';
+  private isLogged: boolean;
+  public account: string;
+  subscription: Subscription;
 
-  constructor() { }
+  constructor(private _navService: NavigationService) { 
+      this.subscription = _navService.loggedInConfirmed$.subscribe(account => {
+        this.account = account;
+      });
+  }
 
   ngOnInit() {
+    this.account !== undefined ? this.isLogged = true : this.isLogged = false;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

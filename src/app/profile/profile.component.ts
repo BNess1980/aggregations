@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProfileService } from '../shared/profile.service';
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { merchantClient } from '../../../server/models/merchant';
 
 @Component({
@@ -21,9 +21,13 @@ export class ProfileComponent implements OnInit {
        this.id = params['id'];
        console.log('Coming from login.service: '+this.id);
        this._profileService.getLoggedMerchant(this.id).subscribe(profile => {
-       	this.profile = profile;
+       	this.profile = profile; 
        });
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
 }

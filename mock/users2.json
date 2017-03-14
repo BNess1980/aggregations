@@ -8,10 +8,8 @@
 	"state":"NJ",	
 	"zip": "07102",
 	"merchant_number":"1",
-	"validations": {
-		"1/2 Off Daily":[{"barcode":"","rate":""}],
-		"75% Weekend":[{"barcode":"","rate":""}]
-	},
+	"validations":[{"name":"1/2 Off Daily"},{"name":"75% Off"}],
+	"tickets":[{"barcode":"","rate":"","validation":""}],
 	"phone": "978-353-1766",
 	"contact_name":"Bruce Ness",
 	"contact_email":"rutgers@edu.com"
@@ -25,10 +23,8 @@
 	"state":"NJ",
 	"zip": "07302",
 	"merchant_number":"2",	
-	"validations": {
-		"1/2 Off Daily":[{"barcode":"","rate":""}],
-		"75% Weekend":[{"barcode":"","rate":""}]
-	},	
+	"validations":[{"name":"1/2 Off Daily"},{"name":"75% Off"}],
+	"tickets":[{"barcode":"","rate":"","validation":""}],
 	"phone": "201-547-6400",
 	"contact_name":"Bruce Ness",	
 	"contact_email":"spprep@edu.com"		
