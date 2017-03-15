@@ -12,10 +12,10 @@ export class NavComponent {
   public brandTitle:string = 'PARKFAST Validations';
   private isLogged: boolean = false;
   public account: string;
-  subscription: Subscription;
+  subscribe: Subscription;
 
   constructor(private _navService: NavigationService) { 
-      this.subscription = _navService.loggedInConfirmed$.subscribe(account => {
+      this.subscribe = _navService.loggedInConfirmed$.subscribe(account => {
         this.account = account;
         console.log(this.account);
         account.length > 0 ? this.isLogged = true : this.isLogged = false;
@@ -23,7 +23,7 @@ export class NavComponent {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscribe.unsubscribe();
   }
 
 }

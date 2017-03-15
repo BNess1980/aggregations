@@ -3,23 +3,32 @@
         <div class="mt-3 card card-block merchant-card">
             <h2 class="card-title">{{ profile.account }}</h2>
             <p class="card-text">
-            {{ profile.street_address }}
-            {{ profile.city }}
-            {{ profile.zip }}
+                {{ profile.street_address }} {{ profile.city }} {{ profile.zip }}
             </p>
+            <form novalidate class="form-horizontal form-profile" #profileForm="ngForm">
+                <div class="form-group">
+                    <label for="validation" class="control-label">Merchant Coupons</label>
+                    <select class="form-control" name="validation">
+                        <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
+                    </select>
+                </div>
 
+                <div class="form-group">
 
-        <form novalidate class="form-horizontal form-validate">
+                    <label for="ticketNo" class="control-label">Enter Ticket No.*</label>
 
-            <div class="form-group">
-                <label for="validation" class="control-label">Validations</label>
-                <select class="form-control" id="validation">
-                    <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
-                </select>       
-            </div>
+                    <input type="text" class="form-control" name="ticketNo" placeholder="Enter ticket number" [(ngModel)]="ticket.ticketNo" #ticketNo="ngModel" minlength="6" maxlength="6" required>
 
-		</form>
+                    <small *ngIf="ticketNo.errors?.required && (ticketNo.touched)" cass="text-danger">*Ticket Number is required</small>
+                    
+                    <small *ngIf="ticketNo.errors?.minlength && (ticketNo.touched)" cass="text-danger">*You must enter 6 digits</small>
 
+                    <small *ngIf="ticketNo.errors?.maxlength && (ticketNo.touched)" cass="text-danger">*You must enter 6 digits</small>                    
+
+                </div>
+
+                <button (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
+            </form>
         </div>
     </div>
 </div>

@@ -31,8 +31,9 @@ export class LoginComponent implements OnInit {
     this.loggedIn = true;
     this._loginService.login(model).subscribe(data => {
       this.data = data;
+      // Update nav and remove login link
       this._navService.setAccountName(this.data.account);
-      //this._navService.setAccountName(this.data.account);
+      // Redirect to profile page
       this._loginService.redirectToMerchant(this.data._id);
     }, error => {
       this.loggedIn = false;
