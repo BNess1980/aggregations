@@ -1,10 +1,13 @@
-const express = require('express');
+const express = require('express')
 const router = express.Router();
 const mock = require('../../mock/users');
 const Merchant = require('../models/merchant');
-const Coupon = require('../models/coupon');
 const mongoose = require('mongoose');
-const uriDB:string = 'mongodb://localhost:27017/users';
+
+import { secomDB } from './secomDB';
+import { localMongoDB } from './mongoDB';
+
+console.log('Database uri\'s are '+localMongoDB+' and '+secomDB);
 
 // PassportJS
 const passport = require('passport');
@@ -13,20 +16,14 @@ const passport = require('passport');
 const passwordHash = require('password-hash');
 
 // Mongoose/Mongo database connection
-mongoose.connect(uriDB, function(err) {
+mongoose.connect(localMongoDB, function(err) {
 	if(err)
 		throw err
-	console.log(`Successfully connected to database ${uriDB}`);		
+	console.log(`Successfully connected to database ${localMongoDB}`);		
 }); // connect to local db
 
 
 /*************** Server Routes ****************/
-
-router.use(function(req,res,next) {
-	console.log('CRUD operation is occuring');
-	next();
-});
-
 /*GET api listening*/
 router.get('/', (req,res) => {
 	res.send('api works');
@@ -105,7 +102,7 @@ router.route('/merchants/:_id')
         });
     })
 
-    // Update merchant witrh
+    // Update merchant with
     .put(function(req,res) {
 
     	Merchant.findById(req.params._id, function(err, data) {
@@ -147,6 +144,10 @@ router.route('/merchants/:_id')
     });
 
 router.route('/profile/:_id')
+    .post(function(req,res) {
+        res.json();                  
+    })
+
     .get(function(req,res) {
         Merchant.findById(req.params._id, function(err, data) {
             if(err)

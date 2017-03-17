@@ -1,10 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpModule, BrowserXhr, JsonpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Use RouterModule to set up routes
 import { Routes, RouterModule } from '@angular/router';
+import { CustExtBrowserXhr } from './shared/cust-ext-browser-xhr';
+
 
 // Importing service genergated with ng generate service
 import { NavigationService } from './shared/navigation.service';
@@ -14,7 +16,11 @@ import { RegisterService } from './shared/register.service';
 import { LoginService } from './shared/login.service';
 import { ValidationsService } from './shared/validations.service';
 import { ProfileService } from './shared/profile.service';
+import { TicketService } from './shared/ticket.service';
 
+
+// For CORS requests
+//import { CustExtBrowserXhr } from './shared/cust-ext-browser-xhr';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -66,9 +72,10 @@ const ROUTES = [
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
+    JsonpModule, 
     RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService], // YOU MUST ADD ALL SERVICES HERE
+  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService,TicketService/*,CustExtBrowserXhr*/], // YOU MUST ADD ALL SERVICES HERE
   bootstrap: [AppComponent]
 })
 export class AppModule { }

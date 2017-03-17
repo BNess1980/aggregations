@@ -6,4 +6,6 @@
   font-family:"Ubuntu", Arial, sans-serif;  	
 }
 
-.merchant-card h2{border-bottom:1px solid #fdcb34}
+.merchant-card h2{border-bottom:1px solid #fdcb34;}
+
+.merchant-card i{margin:0 15px 0 15px;}

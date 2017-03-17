@@ -42,6 +42,8 @@
     "angular-cli": "1.0.0-beta.28.3",
     "bootstrap": "^4.0.0-alpha.6",
     "codelyzer": "~2.0.0-beta.1",
+    "cors": "^2.8.1",
+    "express-cors": "0.0.3",
     "express-messages": "^1.0.1",
     "express-session": "^1.15.1",
     "jasmine-core": "2.5.2",

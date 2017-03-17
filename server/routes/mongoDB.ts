@@ -1,0 +1,1 @@
+export const localMongoDB = 'mongodb://localhost:27017/users';

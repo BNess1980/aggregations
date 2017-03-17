@@ -1,5 +1,31 @@
 # Aggregations
 
+Currently uses a local mongo database. Schema can be imported from /mock/users.json. Instructions for setup and import are also located in mock dir
+
+Use "npm run build" in cmd window to initiate the build and run the server app will run at localhost:3100. This is both nodejs and angular2 code
+
+You may need to install cors plugin if using Chrome to be able to use Secom api functions
+https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc
+
+Settings are below
+
+Origin:*
+
+Response Headers:
+
+Access-Control-Allow-Origin:
+http://localhost:3100
+
+Access-Control-Allow-Headers:
+Origin, X-Requested-With, Content-Type, Accept
+
+Access-Control-Allow-Methods:
+GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
+
+Access-Control-Allow-Credentials:
+false
+
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.28.3.
 
 ## Development server

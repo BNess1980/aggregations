@@ -5,6 +5,7 @@
             <p class="card-text">
                 {{ profile.street_address }} {{ profile.city }} {{ profile.zip }}
             </p>
+            <p classs="card-text">Contact Info:<i class="fa fa-user"></i>{{ profile.contact_name }} <i class="fa fa-envelope"></i>{{ profile.contact_email}} <i class="fa fa-phone"></i>{{ profile.phone }}</p>
             <form novalidate class="form-horizontal form-profile" #profileForm="ngForm">
                 <div class="form-group">
                     <label for="validation" class="control-label">Merchant Coupons</label>

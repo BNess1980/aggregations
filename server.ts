@@ -11,12 +11,41 @@ const api = require('./server/routes/api');
 
 require('./config/passport')(passport); // pass passport for configuration
 
+const cors = require('cors');
+
+const whitelist = ['http://localhost:3100'];
+/*
+let corsOptionsDelegate = function(req, callback){
+  let corsOptions;
+  if(whitelist.indexOf(req.header('Origin')) !== -1){
+    console.log('Header = '+req.header('Origin'));
+    corsOptions = { 
+      origin: true
+    }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    console.log('Header = '+req.header('Origin'));
+    corsOptions = { 
+      origin: false,
+      methods:['GET,HEAD,PUT,PATCH,POST,DELETE'],
+      credentials: false, 
+      allowedHeaders:['Origin, X-Requested-With, Content-Type, Accept, Authorization']
+    }; // reflect (enable) the requested origin in the CORS response    
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options 
+};
+
+app.post('*', cors(corsOptionsDelegate), function(req, res, next){
+  console.log('Hitting post route')
+  next();
+});
+*/
+
 // Parsers for POST data
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // Handle sessions
 app.use(session({
@@ -29,7 +58,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Set our api routes
 app.use('/api', api);
 
 // Catch all other routes and return the index file

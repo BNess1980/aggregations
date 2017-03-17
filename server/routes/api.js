@@ -1,25 +1,23 @@
+"use strict";
 var express = require('express');
 var router = express.Router();
 var mock = require('../../mock/users');
 var Merchant = require('../models/merchant');
-var Coupon = require('../models/coupon');
 var mongoose = require('mongoose');
-var uriDB = 'mongodb://localhost:27017/users';
+var secomDB_1 = require('./secomDB');
+var mongoDB_1 = require('./mongoDB');
+console.log('Database uri\'s are ' + mongoDB_1.localMongoDB + ' and ' + secomDB_1.secomDB);
 // PassportJS
 var passport = require('passport');
 // Hash password on registration
 var passwordHash = require('password-hash');
 // Mongoose/Mongo database connection
-mongoose.connect(uriDB, function (err) {
+mongoose.connect(mongoDB_1.localMongoDB, function (err) {
     if (err)
         throw err;
-    console.log("Successfully connected to database " + uriDB);
+    console.log("Successfully connected to database " + mongoDB_1.localMongoDB);
 }); // connect to local db
 /*************** Server Routes ****************/
-router.use(function (req, res, next) {
-    console.log('CRUD operation is occuring');
-    next();
-});
 /*GET api listening*/
 router.get('/', function (req, res) {
     res.send('api works');

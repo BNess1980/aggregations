@@ -54,9 +54,6 @@ body {
 :-ms-input-placeholder { /* IE 10+ */
   color: #fdcb34;
 }
-:-moz-placeholder { /* Firefox 18- */
-  color: #fdcb34;
-}
 
 h4.heading{color:#fdcb34;font-family:'Roboto', Arial, sans-serif;}
 .card{background-color:#fdcb34;color:black;}
