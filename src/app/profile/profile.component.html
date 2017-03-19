@@ -14,7 +14,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" *ngIf="!amount">
 
                     <label for="ticketNo" class="control-label">Enter Ticket No.*</label>
 
@@ -28,7 +28,21 @@
 
                 </div>
 
-                <button (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
+                <p>Amount: {{amount}}</p>
+
+                <div class="form-group" *ngIf="amount">
+
+                    <label for="ticketAmt" class="control-label">Amount*</label>
+
+                    <input type="text" class="form-control" name="ticketAmt" placeholder="${{amount}}" [(ngModel)]="ticket.ticketAmt" #ticketAmt="ngModel" required>
+
+                    <small *ngIf="ticketAmt.errors?.required && (ticketAmt.touched)" cass="text-danger">*Amount is required</small>                 
+
+                </div>
+
+                <button *ngIf="!amount" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
+
+                 <button *ngIf="amount" (click)="validateTicket(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>               
             </form>
         </div>
     </div>

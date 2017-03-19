@@ -17,17 +17,20 @@ export class ProfileComponent implements OnInit {
   private id:string;
   public profile:any = [];
   private rateStr:any = [];
-  public amount:string;    
+  private rate:string;  
+  public amount: any [];    
   private ticket: Ticket;
   public barcode:string;
   private merchantNo: string;
 
-  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _route: ActivatedRoute) { }
+  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _route: ActivatedRoute) {
+  }
 
   ngOnInit() {
 
     this.ticket = {
-      ticketNo: ''
+      ticketNo: '',
+      ticketAmt: ''
     };
 
     this.subscribe = this._route.params.subscribe(params => {
@@ -50,9 +53,45 @@ export class ProfileComponent implements OnInit {
     const merchantNo = this.merchantNo;
     this._ticketService.getTicketRate(barcode, merchantNo).subscribe(rate => {
       this.rateStr = JSON.parse(rate);
-      console.log(this.rateStr._body);
-      this.amount = this.rateStr._body.match(/^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/);
-      console.log(this.amount);
+      this.rate = this.rateStr._body;
+      console.log(typeof(this.rate) +' '+ this.rate);
+
+      let regPrice =  /^\d+\.\d{1,2}$/;
+
+      //let testPrice = '10.00';
+
+      //console.log(regPrice.test(testPrice));
+
+      let arr = this.rate.split(" ");
+      for(let i = 0; i < arr.length; i++) {
+        if(arr[i].match(regPrice)) {
+          console.log(arr[i]);
+        }
+      }
+/*
+
+      let arr = [];
+      arr.push(this.rateArr);
+
+
+
+      let test = '18.00';
+      console.log(test.match(regPrice));
+
+      for(let i = 0; i < arr.length; i++) {
+        if(arr[i].match(regPrice)) {
+          console.log(arr[i])
+        }
+      }
+*/
+
+      //let arr = [];
+      //arr.push(this.rateArr);
+      //return this.amount;
     });
   }
+
+  validateTicket(model: Ticket, isValid: boolean) {
+    console.log(model);
+  } 
 }

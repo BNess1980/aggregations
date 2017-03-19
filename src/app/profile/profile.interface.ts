@@ -1,3 +1,4 @@
 export interface Ticket {
-	ticketNo: String
+	ticketNo: String,
+	ticketAmt: String
 }
