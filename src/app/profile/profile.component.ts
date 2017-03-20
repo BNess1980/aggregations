@@ -6,6 +6,10 @@ import { merchantClient } from '../../../server/models/merchant';
 import { Subscription } from 'rxjs/Rx';
 import { Ticket } from './profile.interface';
 
+// Save record for mongo
+//const mongoose = require('mongoose');
+//import { localMongoDB } from '../../../server/routes/mongoDB';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -13,15 +17,24 @@ import { Ticket } from './profile.interface';
 })
 export class ProfileComponent implements OnInit {
 
+  // Ticket and Merchant variables
   private subscribe:any;
   private id:string;
+  private ticket: Ticket; // from Ticket interface
+  public barcode:String;
+  private merchantNo: string; 
   public profile:any = [];
+  public validation: String;
+  
+  // Variables for getting payment
   private rateStr:any = [];
   private rate:string;  
-  public amount: any [];    
-  private ticket: Ticket;
-  public barcode:string;
-  private merchantNo: string;
+  public amount:string;
+
+  // Variables for applying payment    
+  private paymentResp:any = [];
+  public paymentSuccess:boolean = false;
+  public merchantUpdated:any = [];
 
   constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _route: ActivatedRoute) {
   }
@@ -29,6 +42,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
 
     this.ticket = {
+      ticketValidation: '',
       ticketNo: '',
       ticketAmt: ''
     };
@@ -37,7 +51,7 @@ export class ProfileComponent implements OnInit {
        this.id = params['id'];
        console.log('Coming from login.service: '+this.id);
        this._profileService.getLoggedMerchant(this.id).subscribe(profile => {
-       	this.profile = profile; 
+       	this.profile = profile;
         this.merchantNo = this.profile.merchant_number;
         return this.merchantNo;
        });
@@ -48,50 +62,65 @@ export class ProfileComponent implements OnInit {
     this.subscribe.unsubscribe();
   }
 
+  clearTicket() {
+    this.paymentSuccess = false;
+    this.amount = '';
+    this.ngOnDestroy();
+  }
+
   getRate(model: Ticket, isValid: boolean) {
-    let barcode = model.ticketNo;
+
+    console.log(model);
+
+    this.barcode = model.ticketNo;
+    this.validation = model.ticketValidation;
+
     const merchantNo = this.merchantNo;
-    this._ticketService.getTicketRate(barcode, merchantNo).subscribe(rate => {
+
+    this._ticketService.getTicketRate(this.barcode, merchantNo).subscribe(rate => {
       this.rateStr = JSON.parse(rate);
+      console.log(this.rateStr);
       this.rate = this.rateStr._body;
       console.log(typeof(this.rate) +' '+ this.rate);
 
       let regPrice =  /^\d+\.\d{1,2}$/;
-
-      //let testPrice = '10.00';
-
-      //console.log(regPrice.test(testPrice));
-
       let arr = this.rate.split(" ");
-      for(let i = 0; i < arr.length; i++) {
-        if(arr[i].match(regPrice)) {
-          console.log(arr[i]);
-        }
-      }
-/*
-
-      let arr = [];
-      arr.push(this.rateArr);
-
-
-
-      let test = '18.00';
-      console.log(test.match(regPrice));
 
       for(let i = 0; i < arr.length; i++) {
         if(arr[i].match(regPrice)) {
           console.log(arr[i])
+          return this.amount = arr[i];
         }
       }
-*/
-
-      //let arr = [];
-      //arr.push(this.rateArr);
-      //return this.amount;
+     
     });
   }
 
-  validateTicket(model: Ticket, isValid: boolean) {
-    console.log(model);
-  } 
-}
+
+  validateTicket() {
+
+      const paymentAmt:number = parseInt(this.amount) * 100;
+
+      console.log('vars:'+'\n'+this.barcode+'\n'+this.merchantNo+'\n'+paymentAmt);
+
+      this._ticketService.applyPayment(this.barcode, this.merchantNo, paymentAmt).subscribe(rate => {
+        this.paymentResp = JSON.parse(rate);
+        console.log(this.paymentResp);
+        this.paymentResp.statusText = 'OK' ? this.paymentSuccess = true : this.paymentSuccess = false;
+            if(this.paymentSuccess === true) {
+              console.log(this.paymentSuccess);
+              this.updateMerchant(this.id, this.barcode, this.amount, this.validation);
+            }
+            return this.paymentSuccess;
+      });
+
+  }
+
+  updateMerchant(_id, barcode, rate, validation) {
+    this._ticketService.updateAccountTickets(_id, barcode, rate, validation).subscribe(updated => {
+      this.merchantUpdated = updated;
+    });    
+  }
+
+
+} // end ProfileComponent class

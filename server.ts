@@ -14,6 +14,7 @@ require('./config/passport')(passport); // pass passport for configuration
 const cors = require('cors');
 
 const whitelist = ['http://localhost:3100'];
+
 /*
 let corsOptionsDelegate = function(req, callback){
   let corsOptions;
