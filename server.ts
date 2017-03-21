@@ -15,7 +15,7 @@ const cors = require('cors');
 
 const whitelist = ['http://localhost:3100'];
 
-/*
+
 let corsOptionsDelegate = function(req, callback){
   let corsOptions;
   if(whitelist.indexOf(req.header('Origin')) !== -1){
@@ -35,11 +35,16 @@ let corsOptionsDelegate = function(req, callback){
   callback(null, corsOptions); // callback expects two parameters: error and options 
 };
 
+app.put('*', cors(corsOptionsDelegate), function(req, res, next){
+  console.log('Hitting post route')
+  next();
+});
+
 app.post('*', cors(corsOptionsDelegate), function(req, res, next){
   console.log('Hitting post route')
   next();
 });
-*/
+
 
 // Parsers for POST data
 app.use(bodyParser.json());

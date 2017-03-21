@@ -62,7 +62,7 @@ export class TicketService {
        "validation":validation
     }
     let bodyStr = JSON.stringify(req);
-    return this.http.put('/api/profile/'+id, bodyStr, headers).map((res: Response) => res.json());   
+    return this.http.put('/api/profile/'+id, bodyStr, options).map((res: Response) => res.json());   
   }
 
 }

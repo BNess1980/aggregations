@@ -98,7 +98,8 @@ export class ProfileComponent implements OnInit {
 
 
   validateTicket() {
-
+      this.updateMerchant(this.id, this.barcode, this.amount, this.validation);
+      /*
       const paymentAmt:number = parseInt(this.amount) * 100;
 
       console.log('vars:'+'\n'+this.barcode+'\n'+this.merchantNo+'\n'+paymentAmt);
@@ -113,7 +114,7 @@ export class ProfileComponent implements OnInit {
             }
             return this.paymentSuccess;
       });
-
+      */
   }
 
   updateMerchant(_id, barcode, rate, validation) {

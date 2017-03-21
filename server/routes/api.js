@@ -114,18 +114,35 @@ router.route('/merchants/:_id')
 });
 router.route('/profile/:_id')
     .put(function (req, res) {
-    Merchant.findById(req.params._id, function (err, data) {
+    var query = { "_id": req.params._id };
+    var update = {
+        tickets: {
+            barcode: req.body.barcode,
+            rate: req.body.rate,
+            validation: req.body.validation
+        }
+    };
+    var options = { new: true };
+    Merchant.findOneAndUpdate(query, update, options, function (err, merchant) {
         if (err)
-            res.send(err);
-        Merchant.tickets.barcode = req.params.barcode;
-        Merchant.tickets.rate = req.params.rate;
-        Merchant.tickets.validation = req.params.validation; // set the merchants name (comes from the request
-        Merchant.save(function () {
-            if (err)
-                res.send('Error in updating tickets for account' + err);
-            res.json({ message: 'Merchant successfully updated!' });
-        });
+            res.send('Error in saving Merchant ' + err);
+        res.json(merchant);
+        console.log('SUCCEEDED:\n' + merchant);
     });
+    /*
+    Merchant.findById(req.params._id, function (err, merchant) {
+          console.log(req.params._id+'/n'+req.body.barcode);
+          
+          let myMerchant = merchant[0];
+
+          myMerchant.tickets.push({ barcode: req.body.barcode, rate: req.body.rate, validation: req.body.validation });
+          myMerchant.save(function() {
+                if(err)
+                    res.send('Error in saving Merchant '+err);
+                    res.json({ message: 'Merchant successfully updated!'});
+          });
+    });
+    */
 })
     .get(function (req, res) {
     Merchant.findById(req.params._id, function (err, data) {
