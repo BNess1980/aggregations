@@ -46,7 +46,6 @@ router.route('/register')
     //merchant._id = req.body._id;
     console.log(req.body.account);
     merchant.account = req.body.account; // set the merchants name (comes from the request)
-    merchant.account = req.body.username;
     merchant.password = hashedPassword;
     merchant.street_address = req.body.street_address;
     merchant.city = req.body.city;
@@ -86,8 +85,7 @@ router.route('/merchants/:_id')
         if (err)
             res.send(err);
         //Merchant._id = req.body._id;
-        Merchant.name = req.body.account; // set the merchants name (comes from the request)
-        Merchant.name = req.body.username;
+        Merchant.account = req.body.account; // set the merchants name (comes from the request)
         Merchant.password = req.body.password;
         Merchant.street_address = req.body.street_address;
         Merchant.city = req.body.city;
@@ -114,35 +112,17 @@ router.route('/merchants/:_id')
 });
 router.route('/profile/:_id')
     .put(function (req, res) {
-    var query = { "_id": req.params._id };
-    var update = {
-        tickets: {
-            barcode: req.body.barcode,
-            rate: req.body.rate,
-            validation: req.body.validation
-        }
+    var ticket = {
+        barcode: req.body.barcode,
+        rate: req.body.rate,
+        validation: req.body.validation
     };
-    var options = { new: true };
-    Merchant.findOneAndUpdate(query, update, options, function (err, merchant) {
+    Merchant.findOneAndUpdate({ _id: req.params._id }, { $push: { tickets: ticket } }, { safe: true, upsert: true, new: true }, function (err, merchant) {
         if (err)
-            res.send('Error in saving Merchant ' + err);
+            res.send('Error: Possible Duplicate Value' + err);
         res.json(merchant);
         console.log('SUCCEEDED:\n' + merchant);
     });
-    /*
-    Merchant.findById(req.params._id, function (err, merchant) {
-          console.log(req.params._id+'/n'+req.body.barcode);
-          
-          let myMerchant = merchant[0];
-
-          myMerchant.tickets.push({ barcode: req.body.barcode, rate: req.body.rate, validation: req.body.validation });
-          myMerchant.save(function() {
-                if(err)
-                    res.send('Error in saving Merchant '+err);
-                    res.json({ message: 'Merchant successfully updated!'});
-          });
-    });
-    */
 })
     .get(function (req, res) {
     Merchant.findById(req.params._id, function (err, data) {

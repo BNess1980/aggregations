@@ -10,10 +10,12 @@
             <form novalidate class="form-horizontal form-profile" #profileForm="ngForm">
 
                 <div class="form-group" *ngIf="!paymentSucess">
-                    <label for="validation" class="control-label">Merchant Coupons</label>
+                    <label for="validation" class="control-label">Merchant Coupons*</label>
                     <select class="form-control" name="ticketValidation" [(ngModel)]="ticket.ticketValidation" #ticketValidation="ngModel" required>
+                        <option disabled selected value>Choose A Discount</option>
                         <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
                     </select>
+                    <small *ngIf="ticketValidation.errors?.maxlength && (ticketValidation.touched)" cass="text-danger">*You must choose a Coupon</small>     
                 </div>
 
                 <div class="form-group" *ngIf="!amount && !paymentSucess">

@@ -30,7 +30,6 @@ export class ProfileComponent implements OnInit {
   private rateStr:any = [];
   private rate:string;  
   public amount:string;
-
   // Variables for applying payment    
   private paymentResp:any = [];
   public paymentSuccess:boolean = false;
@@ -83,8 +82,13 @@ export class ProfileComponent implements OnInit {
       this.rate = this.rateStr._body;
       console.log(typeof(this.rate) +' '+ this.rate);
 
+      let regTime = /stay = (\d+)/;
       let regPrice =  /^\d+\.\d{1,2}$/;
       let arr = this.rate.split(" ");
+
+      const time = this.rate.match(regTime);
+
+      console.log(time);
 
       for(let i = 0; i < arr.length; i++) {
         if(arr[i].match(regPrice)) {
@@ -92,18 +96,17 @@ export class ProfileComponent implements OnInit {
           return this.amount = arr[i];
         }
       }
-     
+
     });
   }
 
 
-  validateTicket() {
-      this.updateMerchant(this.id, this.barcode, this.amount, this.validation);
-      /*
-      const paymentAmt:number = parseInt(this.amount) * 100;
+  validateTicket() { 
 
-      console.log('vars:'+'\n'+this.barcode+'\n'+this.merchantNo+'\n'+paymentAmt);
-
+      let paymentAmt:number = parseInt(this.amount) * 100;
+      paymentAmt = this._ticketService.resolveDiscount(this.validation, paymentAmt);
+      console.log(paymentAmt);
+    
       this._ticketService.applyPayment(this.barcode, this.merchantNo, paymentAmt).subscribe(rate => {
         this.paymentResp = JSON.parse(rate);
         console.log(this.paymentResp);
@@ -114,7 +117,7 @@ export class ProfileComponent implements OnInit {
             }
             return this.paymentSuccess;
       });
-      */
+     
   }
 
   updateMerchant(_id, barcode, rate, validation) {

@@ -36,7 +36,7 @@ let corsOptionsDelegate = function(req, callback){
 };
 
 app.put('*', cors(corsOptionsDelegate), function(req, res, next){
-  console.log('Hitting post route')
+  console.log('Hitting put route')
   next();
 });
 

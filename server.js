@@ -30,7 +30,7 @@ var corsOptionsDelegate = function (req, callback) {
     callback(null, corsOptions); // callback expects two parameters: error and options 
 };
 app.put('*', cors(corsOptionsDelegate), function (req, res, next) {
-    console.log('Hitting post route');
+    console.log('Hitting put route');
     next();
 });
 app.post('*', cors(corsOptionsDelegate), function (req, res, next) {

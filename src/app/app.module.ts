@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Use RouterModule to set up routes
 import { Routes, RouterModule } from '@angular/router';
-import { CustExtBrowserXhr } from './shared/cust-ext-browser-xhr';
 
 
 // Importing service genergated with ng generate service
@@ -75,7 +74,7 @@ const ROUTES = [
     JsonpModule, 
     RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService,TicketService/*,CustExtBrowserXhr*/], // YOU MUST ADD ALL SERVICES HERE
+  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService,TicketService], // YOU MUST ADD ALL SERVICES HERE
   bootstrap: [AppComponent]
 })
 export class AppModule { }

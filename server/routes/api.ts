@@ -56,7 +56,6 @@ router.route('/register')
         //merchant._id = req.body._id;
         console.log(req.body.account);
         merchant.account = req.body.account;  // set the merchants name (comes from the request)
-        merchant.account = req.body.username;
         merchant.password = hashedPassword;       
         merchant.street_address = req.body.street_address;
         merchant.city = req.body.city;
@@ -110,8 +109,7 @@ router.route('/merchants/:_id')
         		res.send(err);
         	
 	        //Merchant._id = req.body._id;
-	        Merchant.name = req.body.account;  // set the merchants name (comes from the request)
-            Merchant.name = req.body.username;
+	        Merchant.account = req.body.account;  // set the merchants name (comes from the request)
             Merchant.password = req.body.password;                        
 	        Merchant.street_address = req.body.street_address;
             Merchant.city = req.body.city;
@@ -146,14 +144,35 @@ router.route('/merchants/:_id')
 router.route('/profile/:_id')
     .put(function(req, res) {
 
+    let ticket = {
+        barcode: req.body.barcode, 
+        rate: req.body.rate, 
+        validation: req.body.validation            
+    };
+
+    Merchant.findOneAndUpdate(
+
+        {_id: req.params._id},
+        {$push: {tickets: ticket}},
+        {safe: true, upsert: true, new: true},
+
+        function(err, merchant) {
+            if(err)
+              res.send('Error: Possible Duplicate Value'+err);
+              res.json(merchant);
+                console.log('SUCCEEDED:\n'+merchant);
+        });
+    
+    })
+     /*
      let query = {"_id":req.params._id};
 
      let update = {
-         tickets: {
+         tickets: [{
              barcode: req.body.barcode, 
              rate: req.body.rate, 
              validation: req.body.validation
-         }              
+         }]              
      };
 
      let options = {new:true};
@@ -166,7 +185,7 @@ router.route('/profile/:_id')
         });
 
     })
-
+    */
     .get(function(req,res) {
         Merchant.findById(req.params._id, function(err, data) {
             if(err)

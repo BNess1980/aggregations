@@ -65,4 +65,17 @@ export class TicketService {
     return this.http.put('/api/profile/'+id, bodyStr, options).map((res: Response) => res.json());   
   }
 
+  resolveDiscount(validation:String, amount:number) {
+    switch(validation) {
+     case 'Daily':
+       return amount;
+     case '1/2 Off Daily':
+       return amount * .50; 
+     case '$1.00 Off':
+        return amount - 1.00;             
+     default:
+       return amount;    
+    }
+  }
+
 }

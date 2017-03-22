@@ -14,7 +14,7 @@ var merchantSchema = new mongooseImports_1.mongoose.Schema({
     state: String,
     zip: String,
     merchant_number: String,
-    validations: { name: String },
+    validations: { name: String, discount: String, },
     tickets: [{ barcode: String, rate: String, validation: String }],
     phone: String,
     contact_name: String,
