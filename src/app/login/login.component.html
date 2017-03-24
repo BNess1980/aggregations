@@ -2,6 +2,10 @@
     <div class="container">
         <form [formGroup]="loginForm" novalidate class="form-signin" (ngSubmit)="loginUser(loginForm.value,loginForm.isValid)">
 
+            <div *ngIf="errorMsg" class="alert alert-warning" role="alert">
+              <strong>{{ errorMsg }}</strong>
+            </div>
+
             <h4 class="form-signin-heading text-center"><span class="fa fa-lock mr-3"></span>Please Sign In</h4>
 
             <label for="username" class="sr-only">Username</label>

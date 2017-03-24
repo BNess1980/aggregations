@@ -3,6 +3,7 @@ const router = express.Router();
 const mock = require('../../mock/users');
 const Merchant = require('../models/merchant');
 const mongoose = require('mongoose');
+const flash = require('connect-flash');
 
 import { secomDB } from './secomDB';
 import { localMongoDB } from './mongoDB';
@@ -26,18 +27,22 @@ mongoose.connect(localMongoDB, function(err) {
 /*************** Server Routes ****************/
 /*GET api listening*/
 router.get('/', (req,res) => {
-	res.send('api works');
+	res.json('api works');
 });
 
 // Login routes
 router.route('/login')
+    .get(function(req,res) {
+        res.json({ message: req.flash('loginMessage')})
+    })
+
     .post(function(req,res,next) {
          passport.authenticate('local-login', function(err, user, info) {
-            if (err) {
+          if (err) {
             return next(err); 
           }
-          if (user === false) {
-            res.status(401).send('Server Error in login');  
+          if (!user) {  
+            res.status(401).send({ error: req.flash('loginMessage')});
           } else {
             res.json(user);  
           }
@@ -164,28 +169,7 @@ router.route('/profile/:_id')
         });
     
     })
-     /*
-     let query = {"_id":req.params._id};
 
-     let update = {
-         tickets: [{
-             barcode: req.body.barcode, 
-             rate: req.body.rate, 
-             validation: req.body.validation
-         }]              
-     };
-
-     let options = {new:true};
-
-    Merchant.findOneAndUpdate(query, update, options, function(err, merchant) {
-        if (err)
-          res.send('Error in saving Merchant '+err);
-          res.json(merchant);
-            console.log('SUCCEEDED:\n'+merchant)
-        });
-
-    })
-    */
     .get(function(req,res) {
         Merchant.findById(req.params._id, function(err, data) {
             if(err)

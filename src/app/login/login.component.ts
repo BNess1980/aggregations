@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   public loginForm: FormGroup; // model driven form
   public loggedIn: boolean; // whether form has been submitted
+  public errorMsg: string;
   data:any = [];
   account:string;
 
@@ -31,13 +32,15 @@ export class LoginComponent implements OnInit {
     this.loggedIn = true;
     this._loginService.login(model).subscribe(data => {
       this.data = data;
+      console.log(data);
       // Update nav and remove login link
       this._navService.setAccountName(this.data.account);
       // Redirect to profile page
       this._loginService.redirectToMerchant(this.data._id);
     }, error => {
       this.loggedIn = false;
-      console.log('Returned '+this.loggedIn+'\n Error in loggging in '+error);
+      console.log('Returned '+this.loggedIn+'\n Error in logging in '+error);
+      return this.errorMsg = error;
     });
 
   }  

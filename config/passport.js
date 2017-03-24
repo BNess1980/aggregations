@@ -6,6 +6,7 @@ var merchantSchema = require('../server/models/merchant');
 // PassportJS
 var passport = require('passport');
 // expose this function to our app using module.exports
+var flash = require('connect-flash');
 module.exports = function (passport) {
     // =========================================================================
     // passport session setup ==================================================
@@ -68,7 +69,8 @@ module.exports = function (passport) {
         // by default, local strategy uses merchant name and password, we will override with email
         username: 'username',
         password: 'password',
-        passReqToCallback: true // allows us to pass back the entire request to the callback
+        passReqToCallback: true,
+        failureFlash: true
     }, function (req, username, password, done) {
         // find a Merchant whose email is the same as the forms email
         // we are checking to see if the Merchant trying to login already exists
@@ -78,10 +80,10 @@ module.exports = function (passport) {
                 return done(err);
             // if no Merchant is found, return the message
             if (!user)
-                return done(null, false, console.log('No Merchant found.')); // req.flash is the way to set flashdata using connect-flash
+                return done(null, false, req.flash('loginMessage', 'Username not found!')); // req.flash is the way to set flashdata using connect-flash
             // if the Merchant is found but the password is wrong
             if (!user.verifyPassword(password))
-                return done(null, false, console.log('Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
             // all is well, return successful Merchant
             return done(null, user, console.log(user));
         });

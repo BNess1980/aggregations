@@ -4,6 +4,7 @@ var router = express.Router();
 var mock = require('../../mock/users');
 var Merchant = require('../models/merchant');
 var mongoose = require('mongoose');
+var flash = require('connect-flash');
 var secomDB_1 = require('./secomDB');
 var mongoDB_1 = require('./mongoDB');
 console.log('Database uri\'s are ' + mongoDB_1.localMongoDB + ' and ' + secomDB_1.secomDB);
@@ -20,17 +21,20 @@ mongoose.connect(mongoDB_1.localMongoDB, function (err) {
 /*************** Server Routes ****************/
 /*GET api listening*/
 router.get('/', function (req, res) {
-    res.send('api works');
+    res.json('api works');
 });
 // Login routes
 router.route('/login')
+    .get(function (req, res) {
+    res.json({ message: req.flash('loginMessage') });
+})
     .post(function (req, res, next) {
     passport.authenticate('local-login', function (err, user, info) {
         if (err) {
             return next(err);
         }
-        if (user === false) {
-            res.status(401).send('Server Error in login');
+        if (!user) {
+            res.status(401).send({ error: req.flash('loginMessage') });
         }
         else {
             res.json(user);

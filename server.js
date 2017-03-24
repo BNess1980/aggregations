@@ -8,6 +8,8 @@ var session = require('express-session');
 var passport = require('passport');
 var api = require('./server/routes/api');
 require('./config/passport')(passport); // pass passport for configuration
+var flash = require('connect-flash');
+app.use(flash());
 var cors = require('cors');
 var whitelist = ['http://localhost:3100'];
 var corsOptionsDelegate = function (req, callback) {

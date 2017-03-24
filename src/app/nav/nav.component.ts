@@ -18,7 +18,7 @@ export class NavComponent {
       this.subscribe = _navService.loggedInConfirmed$.subscribe(account => {
         this.account = account;
         console.log(this.account);
-        account.length > 0 ? this.isLogged = true : this.isLogged = false;
+        account !== undefined ? this.isLogged = true : this.isLogged = false;
       });
   }
 

@@ -10,6 +10,9 @@ const passport = require('passport');
 const api = require('./server/routes/api');
 
 require('./config/passport')(passport); // pass passport for configuration
+const flash = require('connect-flash');
+
+app.use(flash());
 
 const cors = require('cors');
 
