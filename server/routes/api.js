@@ -5,13 +5,15 @@ var mock = require('../../mock/users');
 var Merchant = require('../models/merchant');
 var mongoose = require('mongoose');
 var flash = require('connect-flash');
+// DB uri info
 var secomDB_1 = require('./secomDB');
 var mongoDB_1 = require('./mongoDB');
 console.log('Database uri\'s are ' + mongoDB_1.localMongoDB + ' and ' + secomDB_1.secomDB);
-// PassportJS
+// PassportJS for login
 var passport = require('passport');
 // Hash password on registration
 var passwordHash = require('password-hash');
+// Needed only if conecting to mLabMongo
 // Mongoose/Mongo database connection
 mongoose.connect(mongoDB_1.localMongoDB, function (err) {
     if (err)

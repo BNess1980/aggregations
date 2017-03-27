@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProfileService } from '../shared/profile.service';
 import { TicketService } from '../shared/ticket.service';
+import { BestParkingService } from '../shared/best-parking.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { merchantClient } from '../../../server/models/merchant';
 import { Subscription } from 'rxjs/Rx';

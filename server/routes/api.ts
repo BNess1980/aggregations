@@ -5,16 +5,20 @@ const Merchant = require('../models/merchant');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 
+// DB uri info
 import { secomDB } from './secomDB';
 import { localMongoDB } from './mongoDB';
+import { mLabMongoDB } from './mongoDB';
 
 console.log('Database uri\'s are '+localMongoDB+' and '+secomDB);
 
-// PassportJS
+// PassportJS for login
 const passport = require('passport');
 
 // Hash password on registration
 const passwordHash = require('password-hash');
+
+// Needed only if conecting to mLabMongo
 
 // Mongoose/Mongo database connection
 mongoose.connect(localMongoDB, function(err) {
@@ -41,7 +45,7 @@ router.route('/login')
           if (err) {
             return next(err); 
           }
-          if (!user) {  
+          if (!user) { // sends flash message as error  
             res.status(401).send({ error: req.flash('loginMessage')});
           } else {
             res.json(user);  
