@@ -7,15 +7,12 @@ import { merchantClient } from '../../../server/models/merchant';
 import { Subscription } from 'rxjs/Rx';
 import { Ticket } from './profile.interface';
 
-// Save record for mongo
-//const mongoose = require('mongoose');
-//import { localMongoDB } from '../../../server/routes/mongoDB';
-
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css','../app.component.css']
 })
+
 export class ProfileComponent implements OnInit {
 
   // Ticket and Merchant variables
@@ -36,7 +33,7 @@ export class ProfileComponent implements OnInit {
   public paymentSuccess:boolean = false;
   public merchantUpdated:any = [];
 
-  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _route: ActivatedRoute) {
+  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -126,6 +123,11 @@ export class ProfileComponent implements OnInit {
       this.merchantUpdated = updated;
     });    
   }
-
+ 
+  getFacilities() {
+    this._bestParkingService.getFacilities().subscribe(facilities => {
+      console.log(facilities);
+    });
+  }
 
 } // end ProfileComponent class

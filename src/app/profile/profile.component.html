@@ -42,12 +42,21 @@
 
                 </div>
 
+
+                 <div class="btn-group" role="group">
+                    <button *ngIf="!amount" (click)="getFacilities()" class="mt-4 btn btn-secondary submit-btn">Get Facilites</button> 
+                    <button *ngIf="!amount" class="mt-4 btn btn-secondary submit-btn">Get reservations</button>                  
+                 </div>  
+
+                 <br />  
+
                  <button *ngIf="!amount" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
 
-                 <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>           
+                 <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>   
 
                  <div *ngIf="paymentSuccess" class="mt-4 mb-4 alert alert-success" role="alert">Ticket has been successfully validated.
                  </div>
+
 
                  <button *ngIf="paymentSuccess" (click)="clearTicket()" class="mt-4 btn btn-lg submit-btn">Enter a new Ticket No.</button>      
 
