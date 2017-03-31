@@ -7,20 +7,20 @@ const passwordHash = require('password-hash');
 // used for Observable in client code /src/register.service.ts
 // *Has to match schema below*
 export interface merchantClient {
-	_id: String,
-	account: String,
-	username: String,
-	password: String,				
-	street_address: String,
-	city: String,
-	state: String,
-	zip: String,
-	merchant_number: String,
-	validations?:{name:String,discount:String},
-	tickets?:[{barcode:String,rate:String,validation:String}],
-	phone: String,
-	contact_name: String,
-	contact_email: String	
+	_id: string,
+	account: string,
+	username: string,
+	password: string,				
+	street_address: string,
+	city: string,
+	state: string,
+	zip: string,
+	merchant_number: string,
+	validations?:{name:string,discount:string},
+	tickets?:[{barcode:string,rate:string,validation:string}],
+	phone: string,
+	contact_name: string,
+	contact_email: string	
 }
 
 // used for mongoose/mongo api in serer code server/routes/api.ts

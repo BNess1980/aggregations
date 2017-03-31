@@ -10,11 +10,11 @@
 
             <label for="username" class="sr-only">Username</label>
             <input type="text" id="username" class="form-control" placeholder="username" formControlName="username">
-            <small [hidden]="loginForm.controls.username.valid || (loginForm.controls.username.pristine && !submitted)" class="text-danger">*You must enter a Username</small>    
+            <small [hidden]="loginForm.controls.username.valid || (loginForm.controls.username.pristine && !submitted)" class="text-warning">*You must enter a Username</small>    
 
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password">
-            <small [hidden]="loginForm.controls.password.valid || (loginForm.controls.password.pristine && !submitted)" class="text-danger">*You must enter a Password</small>
+            <small [hidden]="loginForm.controls.password.valid || (loginForm.controls.password.pristine && !submitted)" class="text-warning">*You must enter a Password</small>
 
             <button class="btn btn-lg btn-block login-btn" type="submit">Sign in</button>
         </form>

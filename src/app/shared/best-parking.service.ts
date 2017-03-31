@@ -8,23 +8,51 @@ export class BestParkingService {
 
   constructor(private _bestParkingAPI: bestParkingAPI, public http: Http) {}
 
-  getFacilities() {
+  public hostDev = this._bestParkingAPI.hostDev;
 
-  	let data = this._bestParkingAPI.createParams();
+  getTimeStamp() {
+  	return this._bestParkingAPI.timestamp;
+  }
+
+  getReservations(barcode) {	
+
+  	let data = this._bestParkingAPI.createParams('barcode',barcode);
   	let digest = this._bestParkingAPI.createDigest(data);
-  	let bestParkingURL = this._bestParkingAPI.hostDev + this._bestParkingAPI.queryFacility;
+  	let url = this.hostDev + this._bestParkingAPI.reservationByFacility;
 
    	const params = new URLSearchParams();
-    params.set('digest', digest);   	
-    params.set('username', this._bestParkingAPI.username);
+   	params.set('barcode', barcode);
+    params.set('username', this._bestParkingAPI.user);
+    params.set('digest', digest);   	    
     params.set('timestamp', this._bestParkingAPI.timestamp);
 
     console.log('params = '+params);
 
     let req = new RequestOptions({search:params});
     
-    return this.http.get(bestParkingURL,req).map((res: Response) => res.json());
+    return this.http.get(url,req).map((res: Response) => res.json());
 
   }
+
+
+  getFacilities() {	
+
+  	let data = this._bestParkingAPI.createParams();
+  	let digest = this._bestParkingAPI.createDigest(data);
+  	let url = this.hostDev + this._bestParkingAPI.queryFacility;
+
+   	const params = new URLSearchParams();
+    params.set('username', this._bestParkingAPI.user);
+    params.set('digest', digest);   	    
+    params.set('timestamp', this._bestParkingAPI.timestamp);
+
+    console.log('params = '+params);
+
+    let req = new RequestOptions({search:params});
+    
+    return this.http.get(url,req).map((res: Response) => res.json());
+
+  }
+
 
 }

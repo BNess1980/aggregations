@@ -7,58 +7,90 @@
             </p>
             <p classs="card-text">Contact Info:<i class="fa fa-user"></i>{{ profile.contact_name }} <i class="fa fa-envelope"></i>{{ profile.contact_email}} <i class="fa fa-phone"></i>{{ profile.phone }}</p>
 
+
             <form novalidate class="form-horizontal form-profile" #profileForm="ngForm">
 
-                <div class="form-group" *ngIf="!paymentSucess">
-                    <label for="validation" class="control-label">Merchant Coupons*</label>
+
+                 <!-- *********** Online Aggregators ********** -->
+                <!-- isReservation Radio -->
+                <div class="form-group">
+                    <label for="ticketReservation" class="control-label">Was your parking reserved online?*</label> 
+                    &nbsp;Yes&nbsp;<input type="radio" name="ticketReservation" [(ngModel)]="ticket.ticketReservation" #ticketReservation="ngModel" [value]="true" (change)="hasReservation(profileForm.value)">
+                    &nbsp;No&nbsp;<input type="radio" name="ticketReservation" [(ngModel)]="ticket.ticketReservation" #ticketReservation="ngModel" [value]="false" (change)="hasReservation(profileForm.value)">
+                </div>            
+
+
+                <!--Reservation Code Input-->
+                <div class="form-group" *ngIf="isReservation">
+
+                    <label for="ticketNo" class="control-label"> Reservation Code*</label>
+
+                    <input type="text" class="form-control" name="ticketNo" placeholder="Enter Reservation Code" [(ngModel)]="ticket.ticketNo" #ticketNo="ngModel" required>
+
+                    <small class="text-warning" *ngIf="ticketNo.errors?.required && (ticketNo.touched)">*Ticket Number is required</small>
+                             
+                </div>                              
+
+                <!-- Reservation Info Button -->
+                 <button *ngIf="isReservation" (click)="getReservation(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+
+
+                <!-- Reservation Msg Box -->
+                <div class="form-group">
+                 <div *ngIf="showReservationBox" [ngClass]="hasBalanace ? 'alert alter-warning' : 'alert alert-success'">
+                     <strong>Ticket status:</strong>
+                        <span *ngIf="isRedeemed">Your ticket has been redeemed</span>
+                        <span *ngIf="!isRedeemed">Your ticket has not been redeemed</span>
+                     <br />
+                     <strong>{{reservationMsg}}</strong>
+                 </div>
+                 </div>
+
+
+                <!-- *********** Secom Validations ********** -->
+                <!--Discounts Select-->
+                <div class="form-group" *ngIf="!paymentSuccess && !isReservation">
+                    <label for="validation" class="control-label">Discount*</label>
                     <select class="form-control" name="ticketValidation" [(ngModel)]="ticket.ticketValidation" #ticketValidation="ngModel" required>
                         <option disabled selected value>Choose A Discount</option>
                         <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
                     </select>
-                    <small *ngIf="ticketValidation.errors?.maxlength && (ticketValidation.touched)" cass="text-danger">*You must choose a Coupon</small>     
+                    <small *ngIf="ticketValidation.errors?.maxlength && (ticketValidation.touched)" class="text-warning">*You must choose a Coupon</small>     
                 </div>
 
-                <div class="form-group" *ngIf="!amount && !paymentSucess">
+                <!--Ticket No. Input-->
+                <div class="form-group" *ngIf="!amount && !paymentSuccess && !isReservation">
 
-                    <label for="ticketNo" class="control-label">Enter Ticket No.*</label>
+                    <label for="ticketNo" class="control-label">Ticket Number*</label>
 
-                    <input type="text" class="form-control" name="ticketNo" placeholder="Enter ticket number" [(ngModel)]="ticket.ticketNo" #ticketNo="ngModel" minlength="6" maxlength="6" required>
+                    <input type="text" class="form-control" name="ticketNo" placeholder="Enter ticket No." [(ngModel)]="ticket.ticketNo" #ticketNo="ngModel" minlength="6" maxlength="6" required>
 
-                    <small *ngIf="ticketNo.errors?.required && (ticketNo.touched)" cass="text-danger">*Ticket Number is required</small>
+                    <small class="text-warning" *ngIf="ticketNo.errors?.required && (ticketNo.touched)">*Ticket Number is required</small>
                     
-                    <small *ngIf="ticketNo.errors?.minlength && (ticketNo.touched)" cass="text-danger">*You must enter 6 digits</small>
+                    <small class="text-warning" *ngIf="ticketNo.errors?.minlength && (ticketNo.touched)">*You must enter 6 digits</small>
 
-                    <small *ngIf="ticketNo.errors?.maxlength && (ticketNo.touched)" cass="text-danger">*You must enter 6 digits</small>                    
+                    <small class="text-warning" *ngIf="ticketNo.errors?.maxlength && (ticketNo.touched)">*You must enter 6 digits</small>                    
 
-                </div>
+                </div>     
 
-                <div class="form-group" *ngIf="amount && !paymentSuccess">
-
+                <!--Ticket amount-->
+                <div class="form-group" *ngIf="amount && !paymentSuccess && !isReservation">
                     <label for="ticketAmt" class="control-label">Amount*</label>
 
                     <input type="text" class="form-control" name="ticketAmt" placeholder="${{amount}}" [(ngModel)]="ticket.ticketAmt" #ticketAmt="ngModel" required>
 
                     <small *ngIf="ticketAmt.errors?.required && (ticketAmt.touched)" cass="text-danger">*Amount is required</small>                 
-
                 </div>
 
 
-                 <div class="btn-group" role="group">
-                    <button *ngIf="!amount" (click)="getFacilities()" class="mt-4 btn btn-secondary submit-btn">Get Facilites</button> 
-                    <button *ngIf="!amount" class="mt-4 btn btn-secondary submit-btn">Get reservations</button>                  
-                 </div>  
+                 <button *ngIf="!amount && !isReservation" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
 
-                 <br />  
+                 <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>                
 
-                 <button *ngIf="!amount" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
-
-                 <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>   
-
+                 <!--Success Message -->
                  <div *ngIf="paymentSuccess" class="mt-4 mb-4 alert alert-success" role="alert">Ticket has been successfully validated.
-                 </div>
-
-
-                 <button *ngIf="paymentSuccess" (click)="clearTicket()" class="mt-4 btn btn-lg submit-btn">Enter a new Ticket No.</button>      
+                    <i class="fa fa-ticket"></i><a (click)="clearTicket()">Enter a new Ticket Number</a>
+                 </div>      
 
             </form>
         </div>

@@ -19,11 +19,12 @@ export class ProfileComponent implements OnInit {
   private subscribe:any;
   private id:string;
   private ticket: Ticket; // from Ticket interface
-  public barcode:String;
+  public barcode: string;
+  public reservationCode: string;
   private merchantNo: string; 
   public profile:any = [];
-  public validation: String;
-  
+  public validation: string;
+  public ticketPlaceholder:string = 'Enter Ticket No.';
   // Variables for getting payment
   private rateStr:any = [];
   private rate:string;  
@@ -32,6 +33,11 @@ export class ProfileComponent implements OnInit {
   private paymentResp:any = [];
   public paymentSuccess:boolean = false;
   public merchantUpdated:any = [];
+  private isReservation:boolean;
+  private isRedeemed: boolean;
+  private hasBalance: boolean = false; 
+  public showReservationBox: boolean;
+  public reservationMsg: string;
 
   constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _route: ActivatedRoute) {
   }
@@ -39,6 +45,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
 
     this.ticket = {
+      ticketReservation: false,
       ticketValidation: '',
       ticketNo: '',
       ticketAmt: ''
@@ -65,6 +72,7 @@ export class ProfileComponent implements OnInit {
     this.ngOnDestroy();
   }
 
+
   getRate(model: Ticket, isValid: boolean) {
 
     console.log(model);
@@ -80,13 +88,12 @@ export class ProfileComponent implements OnInit {
       this.rate = this.rateStr._body;
       console.log(typeof(this.rate) +' '+ this.rate);
 
-      let regTime = /stay = (\d+)/;
+      //let regTime = /stay = (\d+)/;
+      //const time = this.rate.match(regTime);
+      //console.log(time);
+
       let regPrice =  /^\d+\.\d{1,2}$/;
       let arr = this.rate.split(" ");
-
-      const time = this.rate.match(regTime);
-
-      console.log(time);
 
       for(let i = 0; i < arr.length; i++) {
         if(arr[i].match(regPrice)) {
@@ -108,7 +115,7 @@ export class ProfileComponent implements OnInit {
       this._ticketService.applyPayment(this.barcode, this.merchantNo, paymentAmt).subscribe(rate => {
         this.paymentResp = JSON.parse(rate);
         console.log(this.paymentResp);
-        this.paymentResp.statusText = 'OK' ? this.paymentSuccess = true : this.paymentSuccess = false;
+        this.paymentResp.statusText === 'OK' ? this.paymentSuccess = true : this.paymentSuccess = false;
             if(this.paymentSuccess === true) {
               console.log(this.paymentSuccess);
               this.updateMerchant(this.id, this.barcode, this.amount, this.validation);
@@ -118,12 +125,37 @@ export class ProfileComponent implements OnInit {
      
   }
 
+
   updateMerchant(_id, barcode, rate, validation) {
     this._ticketService.updateAccountTickets(_id, barcode, rate, validation).subscribe(updated => {
       this.merchantUpdated = updated;
     });    
   }
  
+
+  hasReservation(model: Ticket) {
+    this.isReservation = model.ticketReservation;
+    return this.isReservation;
+  }
+
+  getReservation(model: Ticket, isValid: boolean) {
+    let reservationCode = model.ticketNo;
+    let currentTime = new Date(this._bestParkingService.getTimeStamp());
+    this._bestParkingService.getReservations(reservationCode).subscribe(reservation => {
+       let reserveTime = new Date(reservation.depart_dt)
+       this.isRedeemed = reservation.redeemed;
+       this.showReservationBox = true; 
+       if(currentTime < reserveTime) {
+          this.hasBalance === true;
+          this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
+       } else {
+          this.reservationMsg = 'You reservation has been paid.';
+       }
+    });
+  }  
+
+
+
   getFacilities() {
     this._bestParkingService.getFacilities().subscribe(facilities => {
       console.log(facilities);

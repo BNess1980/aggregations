@@ -65,7 +65,7 @@ export class TicketService {
     return this.http.put('/api/profile/'+id, bodyStr, options).map((res: Response) => res.json());   
   }
 
-  resolveDiscount(validation:String, amount:number) {
+  resolveDiscount(validation:string, amount:number) {
     switch(validation) {
      case 'Daily':
        return amount;

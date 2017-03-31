@@ -1,5 +1,6 @@
 export interface Ticket {
-	ticketValidation: String,
-	ticketNo: String,
-	ticketAmt: String	
+	ticketReservation:boolean,
+	ticketValidation?:string,
+	ticketNo:string,
+	ticketAmt?:string	
 }
