@@ -32,7 +32,7 @@
                 </div>                              
 
                 <!-- Reservation Info Button -->
-                 <button *ngIf="isReservation" (click)="getReservation(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="isReservation && !showReservationBox" (click)="getReservation(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
 
 
                 <!-- Reservation Msg Box -->
