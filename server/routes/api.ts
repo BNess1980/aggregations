@@ -8,6 +8,7 @@ const flash = require('connect-flash');
 // DB uri info
 import { secomDB } from './secomDB';
 import { localMongoDB } from './mongoDB';
+import { localMongoAggDB } from './mongoDB';
 import { mLabMongoDB } from './mongoDB';
 
 console.log('Database uri\'s are '+localMongoDB+' and '+secomDB);
@@ -20,7 +21,10 @@ const passwordHash = require('password-hash');
 
 // Needed only if conecting to mLabMongo
 
+const conn2 = mongoose.createConnection(localMongoAggDB);
+
 // Mongoose/Mongo database connection
+
 mongoose.connect(localMongoDB, function(err) {
 	if(err)
 		throw err

@@ -17,7 +17,9 @@ import { ValidationsService } from './shared/validations.service';
 import { ProfileService } from './shared/profile.service';
 import { TicketService } from './shared/ticket.service';
 import { BestParkingService } from './shared/best-parking.service';
+import { ParkWhizService } from './shared/park-whiz.service';
 import { bestParkingAPI } from '../../server/routes/BestParkingDB';
+import { parkWhizAPI } from '../../server/routes/ParkWhizDB';
 
 // For CORS requests
 //import { CustExtBrowserXhr } from './shared/cust-ext-browser-xhr';
@@ -75,7 +77,7 @@ const ROUTES = [
     JsonpModule, 
     RouterModule.forRoot(ROUTES), // Add routes to the app
   ],
-  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService,TicketService,BestParkingService,bestParkingAPI], // YOU MUST ADD ALL SERVICES HERE
+  providers: [NavigationService,MerchantService,StatesService,RegisterService,LoginService,ValidationsService,ProfileService,TicketService,BestParkingService,ParkWhizService,bestParkingAPI,parkWhizAPI], // YOU MUST ADD ALL SERVICES HERE
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,3 @@
-//const sprintf = require('sprintf-js').sprintf;
 const CryptoJS = require('crypto-js'); // Conversion to sha256
 const conv =  require('binstring'); // Conversion to binary utf-8, hexidecimal
 const moment = require('moment');

@@ -51,6 +51,7 @@
     "express-cors": "0.0.3",
     "express-messages": "^1.0.1",
     "express-session": "^1.15.1",
+    "fnv-plus": "^1.2.12",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "2.5.0",
     "karma": "1.2.0",
