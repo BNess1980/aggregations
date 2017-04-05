@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProfileService } from '../shared/profile.service';
 import { TicketService } from '../shared/ticket.service';
 import { BestParkingService } from '../shared/best-parking.service';
+import { ParkWhizService } from '../shared/park-whiz.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { merchantClient } from '../../../server/models/merchant';
 import { Subscription } from 'rxjs/Rx';
@@ -29,20 +30,26 @@ export class ProfileComponent implements OnInit {
   private rateStr:any = [];
   private rate:string;  
   public amount:string;
-  // Variables for applying payment    
+  // Variables for applying payment
   private paymentResp:any = [];
   public paymentSuccess:boolean = false;
   public merchantUpdated:any = [];
   private isReservation:boolean;
+  public aggregator:string = '';
+  public aggregators:any = [];      
   private isRedeemed: boolean;
   private hasBalance: boolean = false; 
-  public showReservationBox: boolean;
+  public showReservationBox: boolean = false;
   public reservationMsg: string;
 
-  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _route: ActivatedRoute) {
+
+
+  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _route: ActivatedRoute) {
   }
 
   ngOnInit() {
+
+    this.aggregators = ['Best Parking','Park Whiz'];
 
     this.ticket = {
       ticketReservation: false,
@@ -138,7 +145,7 @@ export class ProfileComponent implements OnInit {
     return this.isReservation;
   }
 
-  getReservation(model: Ticket, isValid: boolean) {
+  getReservationBP(model: Ticket, isValid: boolean) {
     let reservationCode = model.ticketNo;
     let currentTime = new Date(this._bestParkingService.getTimeStamp());
     this._bestParkingService.getReservations(reservationCode).subscribe(reservation => {
@@ -154,7 +161,19 @@ export class ProfileComponent implements OnInit {
     });
   }  
 
+  getReservationPW(model: Ticket, isValid: boolean) {
+    let reservationCode = model.ticketNo;
+    this._parkWhizService.getReservations(reservationCode);
+    this._parkWhizService.getReservations(reservationCode).subscribe(reservation => {
+      console.log(reservation);
+    });
+  }  
 
+  getAggregator(model: Ticket) {
+    this.aggregator = model.ticketAggregator;
+    console.log(this.aggregator);
+    return this.aggregator;
+  }
 
   getFacilities() {
     this._bestParkingService.getFacilities().subscribe(facilities => {

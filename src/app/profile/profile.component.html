@@ -17,22 +17,37 @@
                     <label for="ticketReservation" class="control-label">Was your parking reserved online?*</label> 
                     &nbsp;Yes&nbsp;<input type="radio" name="ticketReservation" [(ngModel)]="ticket.ticketReservation" #ticketReservation="ngModel" [value]="true" (change)="hasReservation(profileForm.value)">
                     &nbsp;No&nbsp;<input type="radio" name="ticketReservation" [(ngModel)]="ticket.ticketReservation" #ticketReservation="ngModel" [value]="false" (change)="hasReservation(profileForm.value)">
-                </div>            
+                </div>                                       
+
+
+                <!--Choose Vendor -->
+                <div class="form-group" *ngIf="isReservation">
+                    <label for="ticketAggregator" class="control-label">Reserved With*</label>
+                    <select class="form-control" name="ticketAggregator" [(ngModel)]="ticket.ticketAggregator" #ticketAggregator="ngModel"  (change)="getAggregator(profileForm.value)" required>
+                        <option disabled selected value>Choose A Vendor</option>
+                        <option *ngFor="let aggregator of aggregators">{{aggregator}}</option>
+                    </select>
+                    <small *ngIf="ticketAggregator.errors?.required && (ticketAggregator.touched)" class="text-warning">*Choose the vendor you made the reservation with</small>     
+                </div>
 
 
                 <!--Reservation Code Input-->
-                <div class="form-group" *ngIf="isReservation">
+                <div class="form-group" *ngIf="aggregator.length > 0">
 
                     <label for="ticketNo" class="control-label"> Reservation Code*</label>
 
                     <input type="text" class="form-control" name="ticketNo" placeholder="Enter Reservation Code" [(ngModel)]="ticket.ticketNo" #ticketNo="ngModel" required>
 
-                    <small class="text-warning" *ngIf="ticketNo.errors?.required && (ticketNo.touched)">*Ticket Number is required</small>
+                    <small class="text-warning" *ngIf="ticketNo.errors?.required && (ticketNo.touched)">*Reservation code is required</small>
                              
-                </div>                              
+                </div>   
 
-                <!-- Reservation Info Button -->
-                 <button *ngIf="isReservation && !showReservationBox" (click)="getReservation(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                <!-- Best Parking Reservation Info Button -->
+                 <button *ngIf="aggregator === 'Best Parking'" (click)="getReservationBP(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+
+
+                <!-- Park Whiz Reservation Info Button -->
+                 <button *ngIf="aggregator === 'Park Whiz'" (click)="getReservationPW(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
 
 
                 <!-- Reservation Msg Box -->
@@ -55,7 +70,7 @@
                         <option disabled selected value>Choose A Discount</option>
                         <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
                     </select>
-                    <small *ngIf="ticketValidation.errors?.maxlength && (ticketValidation.touched)" class="text-warning">*You must choose a Coupon</small>     
+                    <small *ngIf="ticketValidation.errors?.required && (ticketValidation.touched)" class="text-warning">*You must choose a Coupon</small>     
                 </div>
 
                 <!--Ticket No. Input-->
@@ -88,7 +103,7 @@
                  <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>                
 
                  <!--Success Message -->
-                 <div *ngIf="paymentSuccess" class="mt-4 mb-4 alert alert-success" role="alert">Ticket has been successfully validated.
+                 <div *ngIf="paymentSuccess" class="mt-6 mb-6 alert alert-success" role="alert">Ticket has been successfully validated.
                     <br />
                     <i class="fa fa-ticket"></i><a (click)="clearTicket()" href="#">Enter a new Ticket Number</a>
                  </div>      
