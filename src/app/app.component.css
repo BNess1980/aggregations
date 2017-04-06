@@ -15,6 +15,7 @@ body {
 }
 .form-signin .checkbox {
   font-family:"Ubuntu", Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-weight: normal;
 }
 .form-signin .form-control, .form-register .form-control, .form-profile .form-control  {
@@ -48,9 +49,15 @@ body {
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #fdcb34;
 }
+
+:-moz-placeholder { /* Firefox 19+ */
+  color: #fdcb34;
+}
+
 ::-moz-placeholder { /* Firefox 19+ */
   color: #fdcb34;
 }
+
 :-ms-input-placeholder { /* IE 10+ */
   color: #fdcb34;
 }

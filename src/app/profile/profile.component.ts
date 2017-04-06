@@ -151,7 +151,8 @@ export class ProfileComponent implements OnInit {
     this._bestParkingService.getReservations(reservationCode).subscribe(reservation => {
        let reserveTime = new Date(reservation.depart_dt)
        this.isRedeemed = reservation.redeemed;
-       this.showReservationBox = true; 
+       this.showReservationBox = true;
+       console.log(reservation); 
        if(currentTime < reserveTime) {
           this.hasBalance === true;
           this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';

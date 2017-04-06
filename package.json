@@ -71,6 +71,7 @@
     "password-hash": "^1.2.2",
     "protractor": "~4.0.13",
     "sprintf-js": "^1.0.3",
+    "tether": "^1.4.0",
     "ts-node": "1.2.1",
     "tslint": "^4.3.0",
     "typescript": "~2.0.3"

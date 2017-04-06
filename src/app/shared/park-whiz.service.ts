@@ -21,8 +21,6 @@ export class ParkWhizService {
     	params.set('location_id', location_id);
    	}
 
-    console.log('params = '+params);
-
     let req = new RequestOptions({search:params});
 
     console.log(url);
