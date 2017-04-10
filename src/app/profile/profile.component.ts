@@ -3,6 +3,7 @@ import { ProfileService } from '../shared/profile.service';
 import { TicketService } from '../shared/ticket.service';
 import { BestParkingService } from '../shared/best-parking.service';
 import { ParkWhizService } from '../shared/park-whiz.service';
+import { SpotHeroService } from '../shared/spot-hero.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { merchantClient } from '../../../server/models/merchant';
 import { Subscription } from 'rxjs/Rx';
@@ -43,8 +44,7 @@ export class ProfileComponent implements OnInit {
   public reservationMsg: string;
 
 
-
-  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _route: ActivatedRoute) {
+  constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _spotHeroService: SpotHeroService, private _route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -149,10 +149,10 @@ export class ProfileComponent implements OnInit {
     let reservationCode = model.ticketNo;
     let currentTime = new Date(this._bestParkingService.getTimeStamp());
     this._bestParkingService.getReservations(reservationCode).subscribe(reservation => {
+       console.log(reservation); 
        let reserveTime = new Date(reservation.depart_dt)
        this.isRedeemed = reservation.redeemed;
        this.showReservationBox = true;
-       console.log(reservation); 
        if(currentTime < reserveTime) {
           this.hasBalance === true;
           this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
@@ -169,6 +169,13 @@ export class ProfileComponent implements OnInit {
       console.log(reservation);
     });
   }  
+
+
+  getFeedSH() {
+    let feed = this._spotHeroService.getFeed().subscribe(feed => {
+      console.log(feed);
+    });
+  }
 
   getAggregator(model: Ticket) {
     this.aggregator = model.ticketAggregator;

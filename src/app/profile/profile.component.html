@@ -100,7 +100,10 @@
 
                  <button *ngIf="!amount && !isReservation" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
 
-                 <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>                
+                 <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
+
+
+                 <button (click)="getFeedSH()" class="mt-4 btn btn-md submit-btn">RSS Spot Hero</button>
 
                  <!--Success Message -->
                  <div *ngIf="paymentSuccess" class="mt-6 mb-6 alert alert-success" role="alert">Ticket has been successfully validated.

@@ -41,6 +41,7 @@
     "@types/node": "^6.0.42",
     "angular-cli": "1.0.0-beta.28.3",
     "assert": "^1.4.1",
+    "base-64": "^0.1.0",
     "binstring": "^0.2.1",
     "bootstrap": "^4.0.0-alpha.6",
     "bson": "^1.0.4",
@@ -51,6 +52,7 @@
     "express-cors": "0.0.3",
     "express-messages": "^1.0.1",
     "express-session": "^1.15.1",
+    "feedme": "^1.0.0",
     "fnv-plus": "^1.2.12",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "2.5.0",
@@ -70,10 +72,12 @@
     "passport-local": "^1.0.0",
     "password-hash": "^1.2.2",
     "protractor": "~4.0.13",
+    "rss-to-json": "^1.0.2",
     "sprintf-js": "^1.0.3",
     "tether": "^1.4.0",
     "ts-node": "1.2.1",
     "tslint": "^4.3.0",
-    "typescript": "~2.0.3"
+    "typescript": "~2.0.3",
+    "x2js": "^3.1.0"
   }
 }
