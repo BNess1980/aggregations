@@ -182,8 +182,8 @@ export class ProfileComponent implements OnInit {
   }  
 
   getReservationSH() {
-    let feed = this._spotHeroService.getFeed().subscribe(feed => {
-      console.log(feed);
+    let feed = this._spotHeroService.getFeed().subscribe(obj => {
+      console.log(obj.feed.entry);
     });
   }
 
