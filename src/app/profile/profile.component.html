@@ -43,11 +43,15 @@
                 </div>   
 
                 <!-- Best Parking Reservation Info Button -->
-                 <button *ngIf="aggregator === 'Best Parking'" (click)="getReservationBP(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="aggregator === 'Best Parking'" (click)="getReservationBP(profileForm.value,profileForm.valid)" class="mt-4 mb-4 btn btn-lg submit-btn">Get Reservation Info</button>     
 
 
                 <!-- Park Whiz Reservation Info Button -->
-                 <button *ngIf="aggregator === 'Park Whiz'" (click)="getReservationPW(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="aggregator === 'Park Whiz'" (click)="getReservationPW(profileForm.value,profileForm.valid)" class="mt-4 mb-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+
+
+                <!-- Park Whiz Reservation Info Button -->
+                 <button *ngIf="aggregator === 'SpotHero'" (click)="getReservationSH()" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
 
 
                 <!-- Reservation Msg Box -->
@@ -103,10 +107,8 @@
                  <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
 
 
-                 <button (click)="getFeedSH()" class="mt-4 btn btn-md submit-btn">RSS Spot Hero</button>
-
                  <!--Success Message -->
-                 <div *ngIf="paymentSuccess" class="mt-6 mb-6 alert alert-success" role="alert">Ticket has been successfully validated.
+                 <div *ngIf="paymentSuccess" class="alert alert-success mt-4 mb-4" role="alert">Ticket has been successfully validated.
                     <br />
                     <i class="fa fa-ticket"></i><a (click)="clearTicket()" href="#">Enter a new Ticket Number</a>
                  </div>      

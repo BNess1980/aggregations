@@ -9,6 +9,8 @@ import { merchantClient } from '../../../server/models/merchant';
 import { Subscription } from 'rxjs/Rx';
 import { Ticket } from './profile.interface';
 
+const moment = require('moment');
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -39,7 +41,7 @@ export class ProfileComponent implements OnInit {
   public aggregator:string = '';
   public aggregators:any = [];      
   private isRedeemed: boolean;
-  private hasBalance: boolean = false; 
+  private balance: number; 
   public showReservationBox: boolean = false;
   public reservationMsg: string;
 
@@ -49,7 +51,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
 
-    this.aggregators = ['Best Parking','Park Whiz'];
+    this.aggregators = ['Best Parking','Park Whiz','SpotHero'];
 
     this.ticket = {
       ticketReservation: false,
@@ -147,18 +149,25 @@ export class ProfileComponent implements OnInit {
 
   getReservationBP(model: Ticket, isValid: boolean) {
     let reservationCode = model.ticketNo;
-    let currentTime = new Date(this._bestParkingService.getTimeStamp());
-    this._bestParkingService.getReservations(reservationCode).subscribe(reservation => {
-       console.log(reservation); 
-       let reserveTime = new Date(reservation.depart_dt)
-       this.isRedeemed = reservation.redeemed;
+
+    this._bestParkingService.getReservations(reservationCode).subscribe(obj => {
+
+       console.log(obj); 
+
+       let currentTime = moment().format();
+       let reserveTime = obj.reservation.depart_dt;
+       this.isRedeemed = obj.reservation.redeemed;
+       this.balance = obj.reservation.fee;       
        this.showReservationBox = true;
-       if(currentTime < reserveTime) {
-          this.hasBalance === true;
+
+       if(currentTime > reserveTime && this.isRedeemed === false) {
           this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
-       } else {
-          this.reservationMsg = 'You reservation has been paid.';
+       } else if(currentTime < reserveTime && this.isRedeemed === false) {
+          this.reservationMsg = 'You current reservation fee is $'+this.balance;        
+       } else if(currentTime < reserveTime && this.isRedeemed === true) {
+          this.reservationMsg = 'You current reservation is paid';     
        }
+
     });
   }  
 
@@ -170,8 +179,7 @@ export class ProfileComponent implements OnInit {
     });
   }  
 
-
-  getFeedSH() {
+  getReservationSH() {
     let feed = this._spotHeroService.getFeed().subscribe(feed => {
       console.log(feed);
     });
