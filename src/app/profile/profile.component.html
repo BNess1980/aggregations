@@ -51,8 +51,16 @@
 
 
                 <!-- Park Whiz Reservation Info Button -->
-                 <button *ngIf="aggregator === 'SpotHero'" (click)="getReservationSH()" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="aggregator === 'SpotHero'" (click)="filterReservationSH(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
 
+                 <div *ngIf="spotHeroBarcode.length > 0">
+                     <div *ngIf="aggregator === 'SpotHero'" >
+                         <div *ngFor="let reservation of spotHeroReservations | SpotHeroBarcodePipe:spotHeroBarcode">
+                         Barcode:{{reservation.barcode}}<br />
+                         Fee:{{reservation.permitValue}}
+                         </div>
+                     </div>
+                </div>
 
                 <!-- Reservation Msg Box -->
                 <div class="form-group">

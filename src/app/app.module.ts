@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Use RouterModule to set up routes
 import { Routes, RouterModule } from '@angular/router';
 
+// pipe for Spot Hero RSS filtering
+import { SpotHeroBarcodePipe } from './shared/spot-hero-barcode.pipe';
 
 // Importing service genergated with ng generate service
 import { NavigationService } from './shared/navigation.service';
@@ -69,7 +71,8 @@ const ROUTES = [
     LoginComponent,
     NavComponent,
     RegisterComponent,
-    ProfileComponent
+    ProfileComponent,
+    SpotHeroBarcodePipe
   ],
   imports: [
     BrowserModule,
