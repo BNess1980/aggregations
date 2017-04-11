@@ -160,6 +160,8 @@ export class ProfileComponent implements OnInit {
        this.balance = obj.reservation.fee;       
        this.showReservationBox = true;
 
+       console.log(reserveTime+'\n'+currentTime);
+
        if(currentTime > reserveTime && this.isRedeemed === false) {
           this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
        } else if(currentTime < reserveTime && this.isRedeemed === false) {
