@@ -45,12 +45,13 @@ export class ProfileComponent implements OnInit {
   public aggregator:string = '';
   public aggregators:any = [];      
   private isRedeemed: boolean;
-  private balance: number; 
+  private balance: number;
+  private hasBalance: boolean; 
   public showReservationBox: boolean = false;
   public reservationMsg: string;
   private currentTime = moment().format()
 
-  public spotHeroReservations:any;
+  public spotHeroReservations:Array<any>;
   public spotHeroBarcode:string = ''; 
 
   constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _spotHeroService: SpotHeroService, private _route: ActivatedRoute) {
@@ -60,7 +61,7 @@ export class ProfileComponent implements OnInit {
 
     this._spotHeroService.getFeed().subscribe(obj => {
      console.log(obj.feed.entry);
-     this.spotHeroReservations = JSON.stringify(obj.feed.entry);
+     this.spotHeroReservations = obj.feed.entry;
     });
 
     this.aggregators = ['Best Parking','Park Whiz','SpotHero'];
@@ -198,7 +199,8 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  filterReservationsSH(model:Ticket, isValid:boolean) {
+  filterReservationSH(model:Ticket, isValid:boolean) {
+    console.log(model.ticketNo);
     this.spotHeroBarcode = model.ticketNo;    
   }
 

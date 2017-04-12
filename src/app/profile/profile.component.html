@@ -53,24 +53,25 @@
                 <!-- Park Whiz Reservation Info Button -->
                  <button *ngIf="aggregator === 'SpotHero'" (click)="filterReservationSH(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
 
-                 <div *ngIf="spotHeroBarcode.length > 0">
-                     <div *ngIf="aggregator === 'SpotHero'" >
-                         <div *ngFor="let reservation of spotHeroReservations | SpotHeroBarcodePipe:spotHeroBarcode">
-                         Barcode:{{reservation.barcode}}<br />
-                         Fee:{{reservation.permitValue}}
-                         </div>
-                     </div>
+                 <!-- Reservation Msg for SpotHero -->
+                 <div *ngIf="spotHeroBarcode.length > 0" class="alert alert-warning mt-4 mb-4">
+                    <div *ngFor="let reservation of spotHeroReservations | SpotHeroBarcodePipe:spotHeroBarcode">
+                        <div *ngIf="reservation.content.inOut === false">
+                            Your ticket has not been redeemed
+                            Current Fee:${{reservation.content.permitValue}}
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Reservation Msg Box -->
+                <!-- Reservation Msg Box for Best Parking/ParkWhiz -->
                 <div class="form-group">
-                 <div *ngIf="showReservationBox" [ngClass]="hasBalanace ? 'alert alter-warning' : 'alert alert-success'">
-                     <strong>Ticket status:</strong>
-                        <span *ngIf="isRedeemed">Your ticket has been redeemed</span>
-                        <span *ngIf="!isRedeemed">Your ticket has not been redeemed</span>
-                     <br />
-                     <strong>{{reservationMsg}}</strong>
-                 </div>
+                     <div *ngIf="showReservationBox" [ngClass]="hasBalanace ? 'alert alter-warning' : 'alert alert-success'">
+                         <strong>Ticket status:</strong>
+                            <span *ngIf="isRedeemed">Your ticket has been redeemed</span>
+                            <span *ngIf="!isRedeemed">Your ticket has not been redeemed</span>
+                         <br />
+                         <strong>{{reservationMsg}}</strong>
+                     </div>
                  </div>
 
 

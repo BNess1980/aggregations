@@ -5,11 +5,21 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SpotHeroBarcodePipe implements PipeTransform {
 
-  transform(entries: any[], barcode: string): boolean {
-    let filteredEntries = entries.filter(p => p.indexOf(barcode) !== -1);
-    if(filteredEntries.length > 0)
-    	return true;
-    return false;
+  transform(value, args:string[]) {
+
+  	let barcode = args;
+
+  	console.log('args: '+barcode);
+
+  	return value.filter(reservation => {
+  		if(reservation.content.barcode === barcode) {
+  			return reservation;
+  		} else {
+  			console.log('No Reservation Found');
+  			return false;
+  		}
+  	});
+
   }
 
 }
