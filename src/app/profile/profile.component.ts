@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit {
   public aggregators:any = [];      
   private isRedeemed: boolean;
   private balance: number;
-  private hasBalance: boolean; 
+  private hasBalance: boolean = false; 
   public showReservationBox: boolean = false;
   public reservationMsg: string;
   private currentTime = moment().format()
@@ -110,10 +110,6 @@ export class ProfileComponent implements OnInit {
       this.rate = this.rateStr._body;
       console.log(typeof(this.rate) +' '+ this.rate);
 
-      //let regTime = /stay = (\d+)/;
-      //const time = this.rate.match(regTime);
-      //console.log(time);
-
       let regPrice =  /^\d+\.\d{1,2}$/;
       let arr = this.rate.split(" ");
 
@@ -175,8 +171,10 @@ export class ProfileComponent implements OnInit {
        console.log(reserveTime+'\n'+this.currentTime);
 
        if(this.currentTime > reserveTime && this.isRedeemed === false) {
+          this.hasBalance = true;
           this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
        } else if(this.currentTime < reserveTime && this.isRedeemed === false) {
+          this.hasBalance = true;
           this.reservationMsg = 'You current reservation fee is $'+this.balance;        
        } else if(this.currentTime < reserveTime && this.isRedeemed === true) {
           this.reservationMsg = 'You current reservation is paid';     
@@ -192,12 +190,6 @@ export class ProfileComponent implements OnInit {
       console.log(reservation);
     });
   }  
-
-  getReservationSH() {
-    let feed = this._spotHeroService.getFeed().subscribe(obj => {
-      console.log(obj.feed.entry);
-    });
-  }
 
   filterReservationSH(model:Ticket, isValid:boolean) {
     console.log(model.ticketNo);

@@ -24,7 +24,7 @@
                 <div class="form-group" *ngIf="isReservation">
                     <label for="ticketAggregator" class="control-label">Reserved With*</label>
                     <select class="form-control" name="ticketAggregator" [(ngModel)]="ticket.ticketAggregator" #ticketAggregator="ngModel"  (change)="getAggregator(profileForm.value)" required>
-                        <option disabled selected value>Choose A Vendor</option>
+                        <option [ngValue]="ticket.ticketAggregator">Choose A Vendor</option>
                         <option *ngFor="let aggregator of aggregators">{{aggregator}}</option>
                     </select>
                     <small *ngIf="ticketAggregator.errors?.required && (ticketAggregator.touched)" class="text-warning">*Choose the vendor you made the reservation with</small>     
@@ -80,7 +80,7 @@
                 <div class="form-group" *ngIf="!paymentSuccess && !isReservation">
                     <label for="validation" class="control-label">Discount*</label>
                     <select class="form-control" name="ticketValidation" [(ngModel)]="ticket.ticketValidation" #ticketValidation="ngModel" required>
-                        <option disabled selected value>Choose A Discount</option>
+                        <option [ngValue]="ticket.ticketValidation">Choose A Discount</option>
                         <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
                     </select>
                     <small *ngIf="ticketValidation.errors?.required && (ticketValidation.touched)" class="text-warning">*You must choose a Coupon</small>     

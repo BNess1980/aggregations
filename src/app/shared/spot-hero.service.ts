@@ -3,10 +3,9 @@ import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angul
 import { spotHeroAPI } from '../../../server/routes/SpotHeroDB';
 import 'rxjs/add/operator/map';
 
-const X2JS = require('x2js');
+const X2JS = require('x2js'); // converts xml to javascript objects
 const x2js = new X2JS();
-const parser = new DOMParser();
-const base64 = require('base-64');
+const base64 = require('base-64'); // encode authorization header w/ get request to SpotHero 
 
 @Injectable()
 export class SpotHeroService {
