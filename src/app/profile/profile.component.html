@@ -56,10 +56,10 @@
                  <!-- Reservation Msg for SpotHero -->
                  <div *ngIf="spotHeroBarcode.length > 0" class="alert alert-warning mt-4 mb-4">
                     <div *ngFor="let reservation of spotHeroReservations | SpotHeroBarcodePipe:spotHeroBarcode">
-                        <div *ngIf="reservation.content.inOut === false">
-                            Your ticket has not been redeemed
-                            Current Fee:${{reservation.content.permitValue}}
-                        </div>
+                        <strong>Ticket status:</strong>
+                        Your ticket has not been redeemed
+                        <br />
+                        <strong>Current Fee:${{reservation.content.permitValue}}</strong>
                     </div>
                 </div>
 

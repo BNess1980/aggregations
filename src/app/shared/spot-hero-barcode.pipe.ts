@@ -3,7 +3,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'SpotHeroBarcodePipe'
 })
+
 export class SpotHeroBarcodePipe implements PipeTransform {
+
+  public spotHeroErrMsg:string;
 
   transform(value, args:string[]) {
 
@@ -14,9 +17,8 @@ export class SpotHeroBarcodePipe implements PipeTransform {
   	return value.filter(reservation => {
   		if(reservation.content.barcode === barcode) {
   			return reservation;
-  		} else {
-  			console.log('No Reservation Found');
-  			return false;
+  		} else if(reservation.content.barcode !== barcode) {
+  			return this.spotHeroErrMsg = 'No SpotHero Reservations wiht that number have been found';
   		}
   	});
 
