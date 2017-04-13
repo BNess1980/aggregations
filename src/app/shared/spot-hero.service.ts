@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { spotHeroAPI } from '../../../server/routes/SpotHeroDB';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+
 
 const X2JS = require('x2js'); // converts xml to javascript objects
 const x2js = new X2JS();
@@ -21,7 +23,9 @@ export class SpotHeroService {
 
     let options = new RequestOptions({headers:headers});  
 
-	return this.http.get(url,options).map((res: Response) => x2js.xml2js(res.text()));
+
+   	return Observable.interval(1000).flatMap(() => this.http.get(url,options)).map((res: Response) => x2js.xml2js(res.text()));
+	//return this.http.get(url,options).map((res: Response) => x2js.xml2js(res.text()));
 
   }  
 

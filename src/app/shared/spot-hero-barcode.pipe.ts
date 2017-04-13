@@ -17,8 +17,6 @@ export class SpotHeroBarcodePipe implements PipeTransform {
   	return value.filter(reservation => {
   		if(reservation.content.barcode === barcode) {
   			return reservation;
-  		} else if(reservation.content.barcode !== barcode) {
-  			return this.spotHeroErrMsg = 'No SpotHero Reservations wiht that number have been found';
   		}
   	});
 
