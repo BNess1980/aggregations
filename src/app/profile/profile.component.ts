@@ -138,7 +138,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  validateTicket(model:Ticket, isValid:boolean) {
+  validateTicket() {
 
       let paymentAmt:number;
       let reservationCredit:number = this.balance; 
@@ -167,7 +167,6 @@ export class ProfileComponent implements OnInit {
       this.merchantUpdated = updated;
     });    
   }
- 
 
   resolveTime(currentTime:any, reservationEnd:any) {
     if(currentTime > reservationEnd) {
@@ -180,6 +179,12 @@ export class ProfileComponent implements OnInit {
   resolveAmount(amount:string){
     return parseInt(amount) * 100;
   }  
+
+  getAggregator(model: Ticket) {
+    this.aggregator = model.ticketAggregator;
+    console.log(this.aggregator);
+    return this.aggregator;
+  }
 
   getReservationBP(model: Ticket, isValid: boolean) {
     let reservationCode = model.ticketReservationNo;
@@ -216,6 +221,7 @@ export class ProfileComponent implements OnInit {
       this._bestParkingService.updateReservations(this.reservationID).subscribe(res => {
         console.log(res);
       });
+      this.validateTicket();
   }  
 
   getReservationPW(model: Ticket, isValid: boolean) {
@@ -248,24 +254,18 @@ export class ProfileComponent implements OnInit {
     });
   }  
 
+  updateReservationPW(model: Ticket, isValid: boolean) {
+      this._parkWhizService.updateReservations(this.reservationID).subscribe(res => {
+        console.log(res);
+      });
+      this.validateTicket();
+  }  
+
   // Sets pipe to find corresponding reservation
   filterReservationSH(model:Ticket, isValid:boolean) {
     console.log(model.ticketReservationNo);
     this.validateAggregator = true;
     this.spotHeroBarcode = model.ticketNo;    
   }
-
-  getAggregator(model: Ticket) {
-    this.aggregator = model.ticketAggregator;
-    console.log(this.aggregator);
-    return this.aggregator;
-  }
-  /*
-  getFacilitiesBP() {
-    this._bestParkingService.getFacilities().subscribe(facilities => {
-      console.log(facilities);
-    });
-  }
-  */
 
 } // end ProfileComponent class
