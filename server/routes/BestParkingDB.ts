@@ -11,6 +11,8 @@ export class bestParkingAPI {
 	// query reservation by facility
 	public reservationByFacility:string = '/reservations/api/v1/reservations.json?';
 
+	public updateReservationUrl:string = '/reservations/api/v1/reservations/';
+
 	// api 	
 	private username:string = 'edison_api_user';
 	public user:string = this.username;

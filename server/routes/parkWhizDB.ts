@@ -1,6 +1,8 @@
 export class parkWhizAPI {
 
-	public api:string = 'http://api.sandbox.parkwhiz.com/';
+	public api:string = 'http://api.parkwhiz.com/';
+	public sandbox:string = 'http://api.sandbox.parkwhiz.com/';
+
     public reservationsURI: string = 'seller/reservations/';
 
 	public publicKey:string = '503dcf3ab915d108393665167b54c7ab';

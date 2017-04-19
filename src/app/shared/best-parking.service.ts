@@ -54,5 +54,16 @@ export class BestParkingService {
 
   }
 
+  updateReservations(reservation_id) {
+    let url = this.hostDev + this._bestParkingAPI.updateReservationUrl+reservation_id+'.json?';
+    let headers = new Headers({'Content-Type':'application/json'});
+    let options = new RequestOptions({headers: headers});       
+    let req = {
+      "redeemed":true
+    }
+    let bodyStr = JSON.stringify(req);
+    return this.http.post(url, bodyStr, options).map((res: Response) => res.json());       
+  }
+
 
 }

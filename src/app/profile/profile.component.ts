@@ -28,11 +28,11 @@ export class ProfileComponent implements OnInit {
   private id:string;
   private ticket: Ticket; // from Ticket interface
   public barcode: string;
-  public reservationCode: string;
   private merchantNo: string; 
   public profile:any = [];
   public validation: string;
   public ticketPlaceholder:string = 'Enter Ticket No.';
+  public buttonText = 'Get Reservation Info';
   // Variables for getting payment
   private rateStr:any = [];
   private rate:string;  
@@ -41,16 +41,18 @@ export class ProfileComponent implements OnInit {
   private paymentResp:any = [];
   public paymentSuccess:boolean = false;
   public merchantUpdated:any = [];
+  private balance:number = 0;
+  private hasBalance: boolean = false; 
+  //Variables for Online Parking aggregators
   private isReservation:boolean;
+  public reservationID:string;
+  public showReservationBox: boolean = false;
+  public reservationMsg: string;
   public aggregator:string = '';
   public aggregators:any = [];      
   private isRedeemed: boolean;
-  private balance: number;
-  private hasBalance: boolean = false; 
-  public showReservationBox: boolean = false;
-  public reservationMsg: string;
-  private currentTime = moment().format()
-
+  private validateAggregator:boolean = false;
+  private currentTime = moment().format();
   public spotHeroReservations:Array<any>;
   public spotHeroBarcode:string = ''; 
 
@@ -59,20 +61,19 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
 
-    this._spotHeroService.getFeed().subscribe(obj => {
-     console.log(obj.feed.entry);
-     this.spotHeroReservations = obj.feed.entry;
-    });
+    // time variable used for resolveTime() method;
+    let currentTime = this.currentTime;
 
-    this.aggregators = ['Best Parking','Park Whiz','SpotHero'];
-
+    // Ticket object matches profile.interface.ts
     this.ticket = {
       ticketReservation: false,
+      ticketReservationNo: '',
       ticketValidation: '',
       ticketNo: '',
       ticketAmt: ''
     };
 
+    // Gets all merchants from mongo database
     this.subscribe = this._route.params.subscribe(params => {
        this.id = params['id'];
        console.log('Coming from login.service: '+this.id);
@@ -82,11 +83,21 @@ export class ProfileComponent implements OnInit {
         return this.merchantNo;
        });
     });
-  }
+
+    // Current Online Parking Aggregators
+    this.aggregators = ['Best Parking','Park Whiz','SpotHero'];
+
+    // SpotHero RSS feed of reservation updating on 1 second interval
+    this._spotHeroService.getFeed().subscribe(obj => {
+     console.log(obj.feed.entry);
+     this.spotHeroReservations = obj.feed.entry;
+    });
+
+  } // End OnInit
 
   ngOnDestroy() {
     this.subscribe.unsubscribe();
-  }
+  } // End OnDestroy
 
   clearTicket() {
     this.paymentSuccess = false;
@@ -94,6 +105,10 @@ export class ProfileComponent implements OnInit {
     this.ngOnDestroy();
   }
 
+  hasReservation(model: Ticket) {
+    this.isReservation = model.ticketReservation;
+    return this.isReservation;
+  }
 
   getRate(model: Ticket, isValid: boolean) {
 
@@ -123,10 +138,14 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  validateTicket(model:Ticket, isValid:boolean) {
 
-  validateTicket() { 
+      let paymentAmt:number;
+      let reservationCredit:number = this.balance; 
+      let secomAmount:number = this.resolveAmount(this.amount);
 
-      let paymentAmt:number = parseInt(this.amount) * 100;
+      reservationCredit < secomAmount ? paymentAmt = reservationCredit : paymentAmt = secomAmount;
+
       paymentAmt = this._ticketService.resolveDiscount(this.validation, paymentAmt);
       console.log(paymentAmt);
     
@@ -143,7 +162,6 @@ export class ProfileComponent implements OnInit {
      
   }
 
-
   updateMerchant(_id, barcode, rate, validation) {
     this._ticketService.updateAccountTickets(_id, barcode, rate, validation).subscribe(updated => {
       this.merchantUpdated = updated;
@@ -151,48 +169,89 @@ export class ProfileComponent implements OnInit {
   }
  
 
-  hasReservation(model: Ticket) {
-    this.isReservation = model.ticketReservation;
-    return this.isReservation;
+  resolveTime(currentTime:any, reservationEnd:any) {
+    if(currentTime > reservationEnd) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  getReservationBP(model: Ticket, isValid: boolean) {
-    let reservationCode = model.ticketNo;
+  resolveAmount(amount:string){
+    return parseInt(amount) * 100;
+  }  
 
+  getReservationBP(model: Ticket, isValid: boolean) {
+    let reservationCode = model.ticketReservationNo;
+
+    this.validateAggregator = true;
     this._bestParkingService.getReservations(reservationCode).subscribe(obj => {
 
        console.log(obj); 
 
-       let reserveTime = obj.reservation.depart_dt;
-       this.isRedeemed = obj.reservation.redeemed;
-       this.balance = obj.reservation.fee;       
        this.showReservationBox = true;
+       this.balance = obj.reservation.fee;      
+       this.reservationID = obj.id;
 
-       console.log(reserveTime+'\n'+this.currentTime);
+       let reserveTime = obj.reservation.depart_dt; 
+       let reservationPast = this.resolveTime(this.currentTime,reserveTime);
+       let redeemed = obj.reservation.redeemed;
 
-       if(this.currentTime > reserveTime && this.isRedeemed === false) {
+       if(!redeemed && reservationPast) {
           this.hasBalance = true;
+          this.isRedeemed = false;
           this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
-       } else if(this.currentTime < reserveTime && this.isRedeemed === false) {
+       } else if(!redeemed && !reservationPast) {
           this.hasBalance = true;
-          this.reservationMsg = 'You current reservation fee is $'+this.balance;        
-       } else if(this.currentTime < reserveTime && this.isRedeemed === true) {
-          this.reservationMsg = 'You current reservation is paid';     
+          this.isRedeemed = false;          
+          this.reservationMsg = 'You current reservation credit is $'+this.balance;        
+       } else if(redeemed && !reservationPast) {
+          this.reservationMsg = 'Reservation has been redeemed and cannot be reused';     
        }
 
     });
+  }
+
+  updateReservationBP(model: Ticket, isValid: boolean) {
+      this._bestParkingService.updateReservations(this.reservationID).subscribe(res => {
+        console.log(res);
+      });
   }  
 
   getReservationPW(model: Ticket, isValid: boolean) {
-    let reservationCode = model.ticketNo;
+    let reservationCode = model.ticketReservationNo;
     this._parkWhizService.getReservations(reservationCode);
-    this._parkWhizService.getReservations(reservationCode).subscribe(reservation => {
-      console.log(reservation);
+    this._parkWhizService.getReservations(reservationCode).subscribe(obj => {
+      
+      console.log(obj);
+
+      this.validateAggregator = true;
+      this.balance = obj.base_amount;
+
+      let reserveTime = obj.utc_end;
+      let status = obj.status;
+      let reservationPast = this.resolveTime(this.currentTime,reserveTime);
+
+      if(status === 'valid' && reservationPast) {
+        this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
+        this.hasBalance = true;
+        this.isRedeemed = false;        
+      } else if(status === 'valid' && !reservationPast) {
+        this.hasBalance = true;
+        this.isRedeemed = false;        
+        this.reservationMsg = 'You current reservation credit is $'+this.balance;           
+      } else if(status === 'canceled') {
+        this.reservationMsg = 'Reservation has been cancelled and cannot be reused';
+      } else if(status === 'used') {
+        this.reservationMsg = 'Reservation has been previously used';
+      }
     });
   }  
 
+  // Sets pipe to find corresponding reservation
   filterReservationSH(model:Ticket, isValid:boolean) {
-    console.log(model.ticketNo);
+    console.log(model.ticketReservationNo);
+    this.validateAggregator = true;
     this.spotHeroBarcode = model.ticketNo;    
   }
 
@@ -201,11 +260,12 @@ export class ProfileComponent implements OnInit {
     console.log(this.aggregator);
     return this.aggregator;
   }
-
-  getFacilities() {
+  /*
+  getFacilitiesBP() {
     this._bestParkingService.getFacilities().subscribe(facilities => {
       console.log(facilities);
     });
   }
+  */
 
 } // end ProfileComponent class

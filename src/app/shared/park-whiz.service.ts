@@ -11,7 +11,7 @@ export class ParkWhizService {
   getReservations(reservation:string,location_id?:string) {	
 
   	const reservationID = reservation;
-  	let url = this._parkWhizAPI.api + this._parkWhizAPI.reservationsURI + reservationID;
+  	let url = this._parkWhizAPI.sandbox + this._parkWhizAPI.reservationsURI + reservationID;
 
    	let params = new URLSearchParams();
    	params.set('public_key', this._parkWhizAPI.publicKey);
@@ -29,5 +29,16 @@ export class ParkWhizService {
 
   }
 
+  updateReservations(reservation_id) {
+    
+    let url = this._parkWhizAPI.sandbox + reservation_id +/checkin/;
+    let params = new URLSearchParams();
+    params.set('public_key', this._parkWhizAPI.publicKey);
+    params.set('secret_key', this._parkWhizAPI.secretKey);
+
+    let req = new RequestOptions({search:params});
+
+    return this.http.post(url,req).map((res: Response) => res.json());       
+  }
 
 }

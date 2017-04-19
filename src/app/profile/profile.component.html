@@ -24,7 +24,7 @@
                 <div class="form-group" *ngIf="isReservation">
                     <label for="ticketAggregator" class="control-label">Reserved With*</label>
                     <select class="form-control" name="ticketAggregator" [(ngModel)]="ticket.ticketAggregator" #ticketAggregator="ngModel"  (change)="getAggregator(profileForm.value)" required>
-                        <option [ngValue]="ticket.ticketAggregator">Choose A Vendor</option>
+                        <option [ngValue]="ticket.ticketAggregator">Choose a Vendor</option>
                         <option *ngFor="let aggregator of aggregators">{{aggregator}}</option>
                     </select>
                     <small *ngIf="ticketAggregator.errors?.required && (ticketAggregator.touched)" class="text-warning">*Choose the vendor you made the reservation with</small>     
@@ -36,22 +36,22 @@
 
                     <label for="ticketNo" class="control-label"> Reservation Code*</label>
 
-                    <input type="text" class="form-control" name="ticketNo" placeholder="Enter Reservation Code" [(ngModel)]="ticket.ticketNo" #ticketNo="ngModel" required>
+                    <input type="text" class="form-control" name="ticketReservationNo" placeholder="Enter Reservation Code" [(ngModel)]="ticket.ticketReservationNo" #ticketReservationNo="ngModel" required>
 
-                    <small class="text-warning" *ngIf="ticketNo.errors?.required && (ticketNo.touched)">*Reservation code is required</small>
+                    <small class="text-warning" *ngIf="ticketReservationNo.errors?.required && (ticketReservationNo.touched)">*Reservation code is required</small>
                              
                 </div>   
 
                 <!-- Best Parking Reservation Info Button -->
-                 <button *ngIf="aggregator === 'Best Parking'" (click)="getReservationBP(profileForm.value,profileForm.valid)" class="mt-4 mb-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="aggregator === 'Best Parking' && !validateAggregator" (click)="getReservationBP(profileForm.value,profileForm.valid)" class="mt-4 mb-4 btn btn-lg submit-btn">{{buttonText}}</button>     
 
 
                 <!-- Park Whiz Reservation Info Button -->
-                 <button *ngIf="aggregator === 'Park Whiz'" (click)="getReservationPW(profileForm.value,profileForm.valid)" class="mt-4 mb-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="aggregator === 'Park Whiz' && !validateAggregator" (click)="getReservationPW(profileForm.value,profileForm.valid)" class="mt-4 mb-4 btn btn-lg submit-btn">{{buttonText}}</button>     
 
 
                 <!-- Park Whiz Reservation Info Button -->
-                 <button *ngIf="aggregator === 'SpotHero'" (click)="filterReservationSH(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Get Reservation Info</button>     
+                 <button *ngIf="aggregator === 'SpotHero' && !validateAggregator" (click)="filterReservationSH(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">{{buttonText}}</button>     
 
                  <!-- Reservation Msg for SpotHero -->
                  <div *ngIf="spotHeroBarcode.length > 0" class="alert alert-warning mt-4 mb-4">
@@ -64,8 +64,8 @@
                 </div>
 
                 <!-- Reservation Msg Box for Best Parking/ParkWhiz -->
-                <div class="form-group">
-                     <div *ngIf="showReservationBox" [ngClass]="hasBalanace ? 'alert alter-warning' : 'alert alert-success'">
+                <div class="form-group" *ngIf="validateAggregator && !paymentSuccess">
+                     <div [ngClass]="isRedeemed ? 'alert alert-success' : 'alert alert-warning'">
                          <strong>Ticket status:</strong>
                             <span *ngIf="isRedeemed">Your ticket has been redeemed</span>
                             <span *ngIf="!isRedeemed">Your ticket has not been redeemed</span>
@@ -76,18 +76,22 @@
 
 
                 <!-- *********** Secom Validations ********** -->
+                <div *ngIf="validateAggregator" class="form-group">
+                    <br />
+                    <h4>Validate Ticket</h4>
+                </div>
                 <!--Discounts Select-->
-                <div class="form-group" *ngIf="!paymentSuccess && !isReservation">
+                <div class="form-group" *ngIf="!paymentSuccess && !isReservation || validateAggregator">
                     <label for="validation" class="control-label">Discount*</label>
                     <select class="form-control" name="ticketValidation" [(ngModel)]="ticket.ticketValidation" #ticketValidation="ngModel" required>
-                        <option [ngValue]="ticket.ticketValidation">Choose A Discount</option>
+                        <option [ngValue]="ticket.ticketValidation">Choose a Discount</option>
                         <option *ngFor="let validation of profile.validations">{{ validation.name }}</option>
                     </select>
                     <small *ngIf="ticketValidation.errors?.required && (ticketValidation.touched)" class="text-warning">*You must choose a Coupon</small>     
                 </div>
 
                 <!--Ticket No. Input-->
-                <div class="form-group" *ngIf="!amount && !paymentSuccess && !isReservation">
+                <div class="form-group" *ngIf="!amount && !paymentSuccess && !isReservation || validateAggregator">
 
                     <label for="ticketNo" class="control-label">Ticket Number*</label>
 
@@ -102,7 +106,7 @@
                 </div>     
 
                 <!--Ticket amount-->
-                <div class="form-group" *ngIf="amount && !paymentSuccess && !isReservation">
+                <div class="form-group" *ngIf="amount && !paymentSuccess">
                     <label for="ticketAmt" class="control-label">Amount*</label>
 
                     <input type="text" class="form-control" name="ticketAmt" placeholder="${{amount}}" [(ngModel)]="ticket.ticketAmt" #ticketAmt="ngModel" required>
@@ -110,10 +114,14 @@
                     <small *ngIf="ticketAmt.errors?.required && (ticketAmt.touched)" cass="text-danger">*Amount is required</small>                 
                 </div>
 
+                <!-- Get current Rate of Secom Ticket -->
+                 <button *ngIf="!amount && !isReservation || validateAggregator" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 mr-4 btn btn-lg submit-btn">Get Ticket Rate</button>
 
-                 <button *ngIf="!amount && !isReservation" (click)="getRate(profileForm.value,profileForm.valid)" [disabled]="profileForm.invalid" class="mt-4 btn btn-lg submit-btn">Get Ticket Rate</button>
-
+                 <!-- Validate Secom Ticket -->
                  <button *ngIf="amount && !paymentSuccess" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
+
+                 <button *ngIf="amount && validateAggregator && aggregator ==='Best parking'" (click)="updateReservationBP()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
+                 <button *ngIf="amount && validateAggregator && aggregator ==='Park Whiz'" (click)="updateReservationPW()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
 
 
                  <!--Success Message -->
