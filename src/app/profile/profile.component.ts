@@ -144,6 +144,9 @@ export class ProfileComponent implements OnInit {
       let reservationCredit:number = this.balance; 
       let secomAmount:number = this.resolveAmount(this.amount);
 
+      console.log('Is the reservation more than secom rack rate');
+      console.log(reservationCredit > secomAmount);
+
       reservationCredit < secomAmount ? paymentAmt = reservationCredit : paymentAmt = secomAmount;
 
       paymentAmt = this._ticketService.resolveDiscount(this.validation, paymentAmt);

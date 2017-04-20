@@ -54,9 +54,9 @@
                  <button *ngIf="aggregator === 'SpotHero' && !validateAggregator" (click)="filterReservationSH(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">{{buttonText}}</button>     
 
                  <!-- Reservation Msg for SpotHero -->
-                 <div *ngIf="spotHeroBarcode.length > 0" class="alert alert-warning mt-4 mb-4">
+                 <div *ngIf="spotHeroBarcode" class="alert alert-warning mt-4 mb-4">
                     <div *ngFor="let reservation of spotHeroReservations | SpotHeroBarcodePipe:spotHeroBarcode">
-                        <strong>Ticket status:</strong>
+                        <strong>Ticket Status:</strong>
                         Your ticket has not been redeemed
                         <br />
                         <strong>Current Fee:${{reservation.content.permitValue}}</strong>
