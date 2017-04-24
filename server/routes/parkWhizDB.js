@@ -1,7 +1,8 @@
 "use strict";
 var parkWhizAPI = (function () {
     function parkWhizAPI() {
-        this.api = 'http://api.sandbox.parkwhiz.com/';
+        this.api = 'http://api.parkwhiz.com/';
+        this.sandbox = 'http://api.sandbox.parkwhiz.com/';
         this.reservationsURI = 'seller/reservations/';
         this.publicKey = '503dcf3ab915d108393665167b54c7ab';
         this.secretKey = '64f7ef4a13f07a42779a7d146e89c836';

@@ -29,16 +29,19 @@ export class ParkWhizService {
 
   }
 
-  updateReservations(reservation_id) {
+  updateReservations(reservation_id:string) {
     
-    let url = this._parkWhizAPI.sandbox + reservation_id +/checkin/;
+    let url = this._parkWhizAPI.sandbox + this._parkWhizAPI.reservationsURI + reservation_id +/checkin/;
+    
+    //let headers = new Headers({'Content-Type':'application/json'});
+
     let params = new URLSearchParams();
-    params.set('public_key', this._parkWhizAPI.publicKey);
-    params.set('secret_key', this._parkWhizAPI.secretKey);
+    params.append('public_key', this._parkWhizAPI.publicKey);
+    params.append('secret_key', this._parkWhizAPI.secretKey);
 
-    let req = new RequestOptions({search:params});
+    //let options = new RequestOptions({search:params, headers: headers});
 
-    return this.http.post(url,req).map((res: Response) => res.json());       
+    return this.http.post(url,params).map((res: Response) => res.json());       
   }
 
 }

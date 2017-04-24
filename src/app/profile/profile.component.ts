@@ -141,7 +141,7 @@ export class ProfileComponent implements OnInit {
   validateTicket() {
 
       let paymentAmt:number;
-      let reservationCredit:number = this.balance; 
+      let reservationCredit:number = this.resolveBalance(this.balance); 
       let secomAmount:number = this.resolveAmount(this.amount);
 
       console.log('Is the reservation more than secom rack rate');
@@ -182,6 +182,10 @@ export class ProfileComponent implements OnInit {
   resolveAmount(amount:string){
     return parseInt(amount) * 100;
   }  
+
+  resolveBalance(amount:number) {
+    return parseInt((amount * 100).toFixed(2));
+  }
 
   getAggregator(model: Ticket) {
     this.aggregator = model.ticketAggregator;
@@ -229,13 +233,14 @@ export class ProfileComponent implements OnInit {
 
   getReservationPW(model: Ticket, isValid: boolean) {
     let reservationCode = model.ticketReservationNo;
-    this._parkWhizService.getReservations(reservationCode);
     this._parkWhizService.getReservations(reservationCode).subscribe(obj => {
       
       console.log(obj);
 
       this.validateAggregator = true;
       this.balance = obj.base_amount;
+      this.reservationID = obj.id
+      this.showReservationBox = true;
 
       let reserveTime = obj.utc_end;
       let status = obj.status;
@@ -260,8 +265,9 @@ export class ProfileComponent implements OnInit {
   updateReservationPW(model: Ticket, isValid: boolean) {
       this._parkWhizService.updateReservations(this.reservationID).subscribe(res => {
         console.log(res);
+        console.log('PW');
       });
-      this.validateTicket();
+      //this.validateTicket();
   }  
 
   // Sets pipe to find corresponding reservation

@@ -10,6 +10,7 @@ var bestParkingAPI = (function () {
         this.queryFacility = '/reservations/api/v1/facilities.json?';
         // query reservation by facility
         this.reservationByFacility = '/reservations/api/v1/reservations.json?';
+        this.updateReservationUrl = '/reservations/api/v1/reservations/';
         // api 	
         this.username = 'edison_api_user';
         this.user = this.username;
