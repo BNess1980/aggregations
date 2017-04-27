@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { parkWhizAPI } from '../../../server/routes/ParkWhizDB';
+import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -32,16 +33,14 @@ export class ParkWhizService {
   updateReservations(reservation_id:string) {
     
     let url = this._parkWhizAPI.sandbox + this._parkWhizAPI.reservationsURI + reservation_id +/checkin/;
-    
-    //let headers = new Headers({'Content-Type':'application/json'});
 
     let params = new URLSearchParams();
     params.append('public_key', this._parkWhizAPI.publicKey);
     params.append('secret_key', this._parkWhizAPI.secretKey);
-
-    //let options = new RequestOptions({search:params, headers: headers});
-
+    
     return this.http.post(url,params).map((res: Response) => res.json());       
   }
+
+
 
 }

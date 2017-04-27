@@ -34,8 +34,8 @@ export class BestParkingService {
 
   }
 
-
-  getFacilities() {	
+/*
+  getFacilities(facility_no) {	
 
   	let data = this._bestParkingAPI.createParams();
   	let digest = this._bestParkingAPI.createDigest(data);
@@ -53,16 +53,29 @@ export class BestParkingService {
     return this.http.get(url,req).map((res: Response) => res.json());
 
   }
+*/
 
-  updateReservations(reservation_id) {
+  updateReservations(reservation_id:string) {
+
+    let data = this._bestParkingAPI.createParams('redeem', reservation_id);
+    let digest = this._bestParkingAPI.createDigest(data);
+
+    console.log(data);
+
     let url = this.hostDev + this._bestParkingAPI.updateReservationUrl+reservation_id+'.json?';
-    let headers = new Headers({'Content-Type':'application/json'});
-    let options = new RequestOptions({headers: headers});       
-    let req = {
-      "redeemed":true
-    }
-    let bodyStr = JSON.stringify(req);
-    return this.http.post(url, bodyStr, options).map((res: Response) => res.json());       
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    const params = new URLSearchParams();
+    params.set('redeemed', 'true');
+    params.set('username', this._bestParkingAPI.user);     
+    params.set('digest', digest);      
+    params.set('timestamp', this._bestParkingAPI.timestampCST);
+
+    let req = new RequestOptions({search:params});
+
+    return this.http.post(url,req,headers).map((res: Response) => res.json());       
   }
 
 

@@ -6,7 +6,7 @@ import { ParkWhizService } from '../shared/park-whiz.service';
 import { SpotHeroService } from '../shared/spot-hero.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { merchantClient } from '../../../server/models/merchant';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription, Observable } from 'rxjs/Rx';
 import { Ticket } from './profile.interface';
 import { SpotHeroBarcodePipe } from '../shared/spot-hero-barcode.pipe';
 
@@ -41,10 +41,11 @@ export class ProfileComponent implements OnInit {
   private paymentResp:any = [];
   public paymentSuccess:boolean = false;
   public merchantUpdated:any = [];
-  private balance:number = 0;
+  private balance:number;
   private hasBalance: boolean = false; 
   //Variables for Online Parking aggregators
   private isReservation:boolean;
+  private reservationValid:boolean;
   public reservationID:string;
   public showReservationBox: boolean = false;
   public reservationMsg: string;
@@ -52,7 +53,7 @@ export class ProfileComponent implements OnInit {
   public aggregators:any = [];      
   private isRedeemed: boolean;
   private validateAggregator:boolean = false;
-  private currentTime = moment().format();
+  private currentTime = moment().format('YYYY-MM-DDTHH:mm:ss');
   public spotHeroReservations:Array<any>;
   public spotHeroBarcode:string = ''; 
 
@@ -147,7 +148,7 @@ export class ProfileComponent implements OnInit {
       console.log('Is the reservation more than secom rack rate');
       console.log(reservationCredit > secomAmount);
 
-      reservationCredit < secomAmount ? paymentAmt = reservationCredit : paymentAmt = secomAmount;
+      reservationCredit > 0 ? paymentAmt = reservationCredit : paymentAmt = secomAmount;
 
       paymentAmt = this._ticketService.resolveDiscount(this.validation, paymentAmt);
       console.log(paymentAmt);
@@ -194,37 +195,53 @@ export class ProfileComponent implements OnInit {
   }
 
   getReservationBP(model: Ticket, isValid: boolean) {
+    
     let reservationCode = model.ticketReservationNo;
-
     this.validateAggregator = true;
+
     this._bestParkingService.getReservations(reservationCode).subscribe(obj => {
 
-       console.log(obj); 
+       console.log(obj);
 
-       this.showReservationBox = true;
-       this.balance = obj.reservation.fee;      
-       this.reservationID = obj.id;
+       if(obj.success === true) {
 
-       let reserveTime = obj.reservation.depart_dt; 
-       let reservationPast = this.resolveTime(this.currentTime,reserveTime);
-       let redeemed = obj.reservation.redeemed;
+         this.reservationValid = true;
+         this.showReservationBox = true;
+         this.balance = obj.reservation.fee;      
+         this.reservationID = obj.reservation.id;
 
-       if(!redeemed && reservationPast) {
-          this.hasBalance = true;
-          this.isRedeemed = false;
-          this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
-       } else if(!redeemed && !reservationPast) {
-          this.hasBalance = true;
-          this.isRedeemed = false;          
-          this.reservationMsg = 'You current reservation credit is $'+this.balance;        
-       } else if(redeemed && !reservationPast) {
-          this.reservationMsg = 'Reservation has been redeemed and cannot be reused';     
+         let reserveTime = obj.reservation.depart_dt; 
+         let reservationPast = this.resolveTime(this.currentTime,reserveTime);
+         let redeemed = obj.reservation.redeemed;
+
+         if(!redeemed && reservationPast) {
+            this.hasBalance = true;
+            this.isRedeemed = false;
+            this.reservationMsg = 'You are currently passed the reservation time and will incur the normal parking rate';
+         } else if(!redeemed && !reservationPast) {
+            this.hasBalance = true;
+            this.isRedeemed = false;          
+            this.reservationMsg = 'You current reservation is paid for up to $'+this.balance;        
+         } else if(redeemed && !reservationPast) {
+            this.reservationMsg = 'Reservation has been redeemed and cannot be reused';     
+         }
+
+       } else {
+         this.reservationValid = false;
+         this.reservationMsg = 'Sorry, '+obj.message;
        }
 
+    },
+    error => {
+      this.reservationValid = false;
+      this.reservationMsg = 'Sorry, reservation is either invalid or cannot be retrieved from Best Parking';      
+      console.log('Error in getting Best Parking Reservation');
     });
   }
 
   updateReservationBP(model: Ticket, isValid: boolean) {
+      let reservationCode = model.ticketReservationNo;  
+      console.log(reservationCode);
       this._bestParkingService.updateReservations(this.reservationID).subscribe(res => {
         console.log(res);
       });
@@ -232,42 +249,47 @@ export class ProfileComponent implements OnInit {
   }  
 
   getReservationPW(model: Ticket, isValid: boolean) {
+    this.validateAggregator = true;
     let reservationCode = model.ticketReservationNo;
     this._parkWhizService.getReservations(reservationCode).subscribe(obj => {
       
       console.log(obj);
 
-      this.validateAggregator = true;
-      this.balance = obj.base_amount;
-      this.reservationID = obj.id
-      this.showReservationBox = true;
+        this.balance = obj.base_amount;
+        this.reservationID = obj.id
+        this.showReservationBox = true;
 
-      let reserveTime = obj.utc_end;
-      let status = obj.status;
-      let reservationPast = this.resolveTime(this.currentTime,reserveTime);
+        let reserveTime = obj.utc_end;
+        let status = obj.status;
+        let reservationPast = this.resolveTime(this.currentTime,reserveTime);
 
-      if(status === 'valid' && reservationPast) {
-        this.reservationMsg = 'Your are currently passed the reservation time and will incur the normal parking rate';
-        this.hasBalance = true;
-        this.isRedeemed = false;        
-      } else if(status === 'valid' && !reservationPast) {
-        this.hasBalance = true;
-        this.isRedeemed = false;        
-        this.reservationMsg = 'You current reservation credit is $'+this.balance;           
-      } else if(status === 'canceled') {
-        this.reservationMsg = 'Reservation has been cancelled and cannot be reused';
-      } else if(status === 'used') {
-        this.reservationMsg = 'Reservation has been previously used';
-      }
+        if(status === 'valid' && reservationPast) {
+          this.reservationMsg = 'You are currently passed the reservation time and will incur the normal parking rate\n'+'You current reservation credit is $'+this.balance;
+          this.hasBalance = true;
+          this.isRedeemed = false;        
+        } else if(status === 'valid' && !reservationPast) {
+          this.hasBalance = true;
+          this.isRedeemed = false;        
+          this.reservationMsg = 'You current reservation is paid for up to $'+this.balance;           
+        } else if(status === 'canceled') {
+          this.reservationMsg = 'Reservation has been cancelled and cannot be reused';
+        } else if(status === 'used') {
+          this.reservationMsg = 'Reservation has been previously used';
+        }
+
+    },
+    error => {
+      this.reservationValid = false;
+      this.reservationMsg = 'Sorry, reservation is either invalid or cannot be retrieved from Park Whiz';
+      console.log('Error in getting Park Whiz Reservation');
     });
   }  
 
   updateReservationPW(model: Ticket, isValid: boolean) {
       this._parkWhizService.updateReservations(this.reservationID).subscribe(res => {
         console.log(res);
-        console.log('PW');
       });
-      //this.validateTicket();
+      this.validateTicket();
   }  
 
   // Sets pipe to find corresponding reservation
