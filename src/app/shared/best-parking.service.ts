@@ -55,27 +55,40 @@ export class BestParkingService {
   }
 */
 
-  updateReservations(reservation_id:string) {
+  updateReservations(reservation_id:string,bool:boolean = true) {
 
-    let data = this._bestParkingAPI.createParams('redeem', reservation_id);
+    let data = this._bestParkingAPI.createParams('redeem', reservation_id, bool);
     let digest = this._bestParkingAPI.createDigest(data);
 
     console.log(data);
 
     let url = this.hostDev + this._bestParkingAPI.updateReservationUrl+reservation_id+'.json?';
 
+    console.log(url);
+
     let headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Content-Type','application/json');
+
+    
+    let req = {
+      "id": reservation_id,
+      "redeemed": true,
+      "timestamp": this._bestParkingAPI.timestamp,
+      "username": this._bestParkingAPI.user
+    }    
+
+    let bodyStr = encodeURIComponent(JSON.stringify(req));
 
     const params = new URLSearchParams();
-    params.set('redeemed', 'true');
-    params.set('username', this._bestParkingAPI.user);     
-    params.set('digest', digest);      
-    params.set('timestamp', this._bestParkingAPI.timestampCST);
+    params.append('digest', digest);
+    //params.append('id', reservation_id);
+    //params.append('redeemed', 'true');   
+    //params.append('timestamp', this._bestParkingAPI.timestamp);    
+    params.append('username', this._bestParkingAPI.user);        
 
-    let req = new RequestOptions({search:params});
+    let options = new RequestOptions({headers:headers});
 
-    return this.http.post(url,req,headers).map((res: Response) => res.json());       
+    return this.http.post(url,params).map((res: Response) => res.json());       
   }
 
 

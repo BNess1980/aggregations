@@ -24,6 +24,9 @@ export class bestParkingAPI {
 	public date = moment(this.currDate).format('YYYY-MM-DD');
 	public timestamp = moment().format('YYYY-MM-DDTHH:mm:ss');
 	public timestampCST = momentTimeZone(this.timestamp).tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss'); // For Posting back to Best Parking
+	public timestampPST = momentTimeZone(this.timestamp).tz('America/Los_Angeles').format('YYYY-MM-DDTHH:mm:ss'); // For Posting back to Best Parking
+
+
 
 	public data:string;
 	public value:string; // Used for either barcode or facility
@@ -34,10 +37,11 @@ export class bestParkingAPI {
 		return this.digest = CryptoJS.enc.Hex.stringify(hashmac);
 	}
 
-	public createParams(type?:string,value?:any) {
+	public createParams(type?:string,value?:any,bool?:boolean) {
 
 		let timestamp = this.timestamp;
 		let timestampCST = this.timestampCST;
+		let timestampPST = this.timestampPST;
 
 		console.log(timestamp); 
 		console.log(timestampCST);
@@ -53,11 +57,13 @@ export class bestParkingAPI {
 	       return this.data = conv(`${date}|${facility}|${timestamp}|${username}`,{out:'utf8'}); // value = facility
 	     case 'redeem':
 	       let id = value;
-	       let redeemed = true;
-	       return this.data = conv(`${id}|${redeemed}|${timestampCST}|${username}`,{out:'utf8'}); // value = reservation id	     	        
+	       let redeemed = bool;
+	       console.log(typeof id);
+	       console.log(typeof bool);
+	       return this.data = conv(`${id}|${redeemed}|${timestamp}|${username}`,{out:'utf8'}); // value = reservation id	     	        
 	     default:
-			this.data = conv(`${timestamp}|${username}`,{out:'utf8'});
-			return this.data;  
+		   this.data = conv(`${timestamp}|${username}`,{out:'utf8'});
+		   return this.data;  
 	    }
 
 	}

@@ -20,14 +20,16 @@ var bestParkingAPI = (function () {
         this.date = moment(this.currDate).format('YYYY-MM-DD');
         this.timestamp = moment().format('YYYY-MM-DDTHH:mm:ss');
         this.timestampCST = momentTimeZone(this.timestamp).tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss'); // For Posting back to Best Parking
+        this.timestampPST = momentTimeZone(this.timestamp).tz('America/Los_Angeles').format('YYYY-MM-DDTHH:mm:ss'); // For Posting back to Best Parking
     }
     bestParkingAPI.prototype.createDigest = function (data) {
         var hashmac = CryptoJS.HmacSHA256(data, this.secretKey);
         return this.digest = CryptoJS.enc.Hex.stringify(hashmac);
     };
-    bestParkingAPI.prototype.createParams = function (type, value) {
+    bestParkingAPI.prototype.createParams = function (type, value, bool) {
         var timestamp = this.timestamp;
         var timestampCST = this.timestampCST;
+        var timestampPST = this.timestampPST;
         console.log(timestamp);
         console.log(timestampCST);
         var username = this.username;
@@ -41,8 +43,10 @@ var bestParkingAPI = (function () {
                 return this.data = conv(date + "|" + facility + "|" + timestamp + "|" + username, { out: 'utf8' }); // value = facility
             case 'redeem':
                 var id = value;
-                var redeemed = true;
-                return this.data = conv(id + "|" + redeemed + "|" + timestampCST + "|" + username, { out: 'utf8' }); // value = reservation id	     	        
+                var redeemed = bool;
+                console.log(typeof id);
+                console.log(typeof bool);
+                return this.data = conv(id + "|" + redeemed + "|" + timestamp + "|" + username, { out: 'utf8' }); // value = reservation id	     	        
             default:
                 this.data = conv(timestamp + "|" + username, { out: 'utf8' });
                 return this.data;

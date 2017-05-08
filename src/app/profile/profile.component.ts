@@ -6,7 +6,7 @@ import { ParkWhizService } from '../shared/park-whiz.service';
 import { SpotHeroService } from '../shared/spot-hero.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { merchantClient } from '../../../server/models/merchant';
-import { Subscription, Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Rx';
 import { Ticket } from './profile.interface';
 import { SpotHeroBarcodePipe } from '../shared/spot-hero-barcode.pipe';
 
@@ -17,9 +17,6 @@ const moment = require('moment');
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css','../app.component.css']
 })
-
-
-
 
 export class ProfileComponent implements OnInit {
 
@@ -43,7 +40,7 @@ export class ProfileComponent implements OnInit {
   public merchantUpdated:any = [];
   private balance:number;
   private hasBalance: boolean = false; 
-  //Variables for Online Parking aggregators
+  //Variables for Online Parking Aggregators
   private isReservation:boolean;
   private reservationValid:boolean;
   public reservationID:string;
@@ -55,7 +52,12 @@ export class ProfileComponent implements OnInit {
   private validateAggregator:boolean = false;
   private currentTime = moment().format('YYYY-MM-DDTHH:mm:ss');
   public spotHeroReservations:Array<any>;
-  public spotHeroBarcode:string = ''; 
+  public spotHeroBarcode:string = '';
+  // Variables for Reservations Messaging
+  public pastReservationTime = 'You are currently passed the reservation time and will incur the normal parking rate';
+  public balancePaid:string = 'You current reservation is paid for up to $';
+  public cancelledReservation:string = 'Reservation has been cancelled and cannot be reused';
+  public usedReservation: string = 'Reservation has been previously used';
 
   constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _spotHeroService: SpotHeroService, private _route: ActivatedRoute) {
   }
@@ -92,6 +94,8 @@ export class ProfileComponent implements OnInit {
     this._spotHeroService.getFeed().subscribe(obj => {
      console.log(obj.feed.entry);
      this.spotHeroReservations = obj.feed.entry;
+    }, error => {      
+      console.log('Error in getting SpotHero Reservations\n'+error);      
     });
 
   } // End OnInit
@@ -217,13 +221,13 @@ export class ProfileComponent implements OnInit {
          if(!redeemed && reservationPast) {
             this.hasBalance = true;
             this.isRedeemed = false;
-            this.reservationMsg = 'You are currently passed the reservation time and will incur the normal parking rate';
+            this.reservationMsg = this.pastReservationTime;
          } else if(!redeemed && !reservationPast) {
             this.hasBalance = true;
             this.isRedeemed = false;          
-            this.reservationMsg = 'You current reservation is paid for up to $'+this.balance;        
+            this.reservationMsg = this.balancePaid + this.balance;        
          } else if(redeemed && !reservationPast) {
-            this.reservationMsg = 'Reservation has been redeemed and cannot be reused';     
+            this.reservationMsg = this.usedReservation;     
          }
 
        } else {
@@ -232,7 +236,7 @@ export class ProfileComponent implements OnInit {
        }
 
     },
-    error => {
+    error => { // 400, 404
       this.reservationValid = false;
       this.reservationMsg = 'Sorry, reservation is either invalid or cannot be retrieved from Best Parking';      
       console.log('Error in getting Best Parking Reservation');
@@ -245,7 +249,7 @@ export class ProfileComponent implements OnInit {
       this._bestParkingService.updateReservations(this.reservationID).subscribe(res => {
         console.log(res);
       });
-      this.validateTicket();
+      //this.validateTicket();
   }  
 
   getReservationPW(model: Ticket, isValid: boolean) {
@@ -264,21 +268,21 @@ export class ProfileComponent implements OnInit {
         let reservationPast = this.resolveTime(this.currentTime,reserveTime);
 
         if(status === 'valid' && reservationPast) {
-          this.reservationMsg = 'You are currently passed the reservation time and will incur the normal parking rate\n'+'You current reservation credit is $'+this.balance;
+          this.reservationMsg = this.pastReservationTime +'\n'+this.balancePaid;
           this.hasBalance = true;
           this.isRedeemed = false;        
         } else if(status === 'valid' && !reservationPast) {
           this.hasBalance = true;
           this.isRedeemed = false;        
-          this.reservationMsg = 'You current reservation is paid for up to $'+this.balance;           
+          this.reservationMsg = this.balancePaid + this.balance;           
         } else if(status === 'canceled') {
-          this.reservationMsg = 'Reservation has been cancelled and cannot be reused';
+          this.reservationMsg = this.cancelledReservation;
         } else if(status === 'used') {
-          this.reservationMsg = 'Reservation has been previously used';
+          this.reservationMsg = this.usedReservation;
         }
 
     },
-    error => {
+    error => { // 400, 404
       this.reservationValid = false;
       this.reservationMsg = 'Sorry, reservation is either invalid or cannot be retrieved from Park Whiz';
       console.log('Error in getting Park Whiz Reservation');
@@ -294,9 +298,10 @@ export class ProfileComponent implements OnInit {
 
   // Sets pipe to find corresponding reservation
   filterReservationSH(model:Ticket, isValid:boolean) {
-    console.log(model.ticketReservationNo);
+    console.log('SpotHero ticket: '+model.ticketReservationNo);
     this.validateAggregator = true;
-    this.spotHeroBarcode = model.ticketNo;    
+    this.spotHeroBarcode = model.ticketReservationNo;    
+    console.log(this.spotHeroBarcode);
   }
 
 } // end ProfileComponent class

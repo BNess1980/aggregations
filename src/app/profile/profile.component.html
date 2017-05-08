@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Reservation Msg Box for Best Parking/ParkWhiz -->
-                <div class="form-group" *ngIf="validateAggregator && !paymentSuccess">
+                <div class="form-group" *ngIf="validateAggregator && !paymentSuccess && !spotHeroBarcode">
                      <div [ngClass]="isRedeemed ? 'alert alert-success' : 'alert alert-warning'">
                          <div *ngIf="reservationValid">
                             <strong>Ticket status:</strong>
