@@ -18,20 +18,14 @@ var bestParkingAPI = (function () {
         this.secretKey = conv('26fb6b29fcf3db80c346de793bb9e1741d0514c1086d92814780807a6ef4bcf0', { out: 'utf8' });
         this.currDate = new Date();
         this.date = moment(this.currDate).format('YYYY-MM-DD');
-        this.timestamp = moment().format('YYYY-MM-DDTHH:mm:ss');
-        this.timestampCST = momentTimeZone(this.timestamp).tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss'); // For Posting back to Best Parking
-        this.timestampPST = momentTimeZone(this.timestamp).tz('America/Los_Angeles').format('YYYY-MM-DDTHH:mm:ss'); // For Posting back to Best Parking
+        this.timestamp = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
     }
     bestParkingAPI.prototype.createDigest = function (data) {
         var hashmac = CryptoJS.HmacSHA256(data, this.secretKey);
         return this.digest = CryptoJS.enc.Hex.stringify(hashmac);
     };
-    bestParkingAPI.prototype.createParams = function (type, value, bool) {
+    bestParkingAPI.prototype.createParams = function (type, value) {
         var timestamp = this.timestamp;
-        var timestampCST = this.timestampCST;
-        var timestampPST = this.timestampPST;
-        console.log(timestamp);
-        console.log(timestampCST);
         var username = this.username;
         var date = this.date;
         switch (type) {
@@ -43,9 +37,9 @@ var bestParkingAPI = (function () {
                 return this.data = conv(date + "|" + facility + "|" + timestamp + "|" + username, { out: 'utf8' }); // value = facility
             case 'redeem':
                 var id = value;
-                var redeemed = bool;
-                console.log(typeof id);
-                console.log(typeof bool);
+                var redeemed = true;
+                console.log(typeof id + ' ' + id);
+                console.log(typeof redeemed + ' ' + redeemed);
                 return this.data = conv(id + "|" + redeemed + "|" + timestamp + "|" + username, { out: 'utf8' }); // value = reservation id	     	        
             default:
                 this.data = conv(timestamp + "|" + username, { out: 'utf8' });

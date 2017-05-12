@@ -121,7 +121,8 @@
                  <!-- Validate Secom Ticket -->
                  <button *ngIf="amount && !paymentSuccess && !validateAggregator" (click)="validateTicket()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>  
 
-                 <button *ngIf="amount && validateAggregator && aggregator ==='Best Parking'" (click)="updateReservationBP(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
+                 <button *ngIf="amount && validateAggregator && aggregator ==='Best Parking'" (click)="updateReservationBP(profileForm.value,profileForm.valid)" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>    
+                   
                  <button *ngIf="amount && validateAggregator && aggregator ==='Park Whiz'" (click)="updateReservationPW()" class="mt-4 btn btn-lg submit-btn">Validate Ticket</button>      
 
 

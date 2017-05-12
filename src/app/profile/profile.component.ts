@@ -92,7 +92,7 @@ export class ProfileComponent implements OnInit {
 
     // SpotHero RSS feed of reservation updating on 1 second interval
     this._spotHeroService.getFeed().subscribe(obj => {
-     console.log(obj.feed.entry);
+     //console.log(obj.feed.entry);
      this.spotHeroReservations = obj.feed.entry;
     }, error => {      
       console.log('Error in getting SpotHero Reservations\n'+error);      
@@ -244,9 +244,9 @@ export class ProfileComponent implements OnInit {
   }
 
   updateReservationBP(model: Ticket, isValid: boolean) {
-      let reservationCode = model.ticketReservationNo;  
-      console.log(reservationCode);
-      this._bestParkingService.updateReservations(this.reservationID).subscribe(res => {
+      let reservationCode = model.ticketReservationNo;
+      console.log('ReservationID='+this.reservationID);
+      this._bestParkingService.updateReservations(this.reservationID,reservationCode).subscribe(res => {
         console.log(res);
       });
       //this.validateTicket();
@@ -299,7 +299,7 @@ export class ProfileComponent implements OnInit {
   // Sets pipe to find corresponding reservation
   filterReservationSH(model:Ticket, isValid:boolean) {
     console.log('SpotHero ticket: '+model.ticketReservationNo);
-    this.validateAggregator = true;
+        this.validateAggregator = true;
     this.spotHeroBarcode = model.ticketReservationNo;    
     console.log(this.spotHeroBarcode);
   }

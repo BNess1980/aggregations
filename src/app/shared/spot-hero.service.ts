@@ -14,6 +14,7 @@ export class SpotHeroService {
 
   constructor(private _spotHeroAPI: spotHeroAPI, private http: Http) {}
 
+
   getFeed() {
 
   	let url = this._spotHeroAPI.rss;
@@ -23,9 +24,8 @@ export class SpotHeroService {
 
     let options = new RequestOptions({headers:headers});  
 
-
-   	return Observable.interval(5400).flatMap(() => this.http.get(url,options)).map((res: Response) => x2js.xml2js(res.text()));
-	//return this.http.get(url,options).map((res: Response) => x2js.xml2js(res.text()));
+	  //return this.http.get(url,options).map((res: Response) => x2js.xml2js(res.text()));
+    return Observable.interval(1800).flatMap(() => this.http.get(url,options)).map((res: Response) => x2js.xml2js(res.text()));    
 
   }  
 
