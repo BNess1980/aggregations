@@ -58,6 +58,7 @@ export class ProfileComponent implements OnInit {
   public balancePaid:string = 'You current reservation is paid for up to $';
   public cancelledReservation:string = 'Reservation has been cancelled and cannot be reused';
   public usedReservation: string = 'Reservation has been previously used';
+  public reservationError:string = 'Sorry, reservation is either invalid or cannot be retrieved from';
 
   constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _spotHeroService: SpotHeroService, private _route: ActivatedRoute) {
   }
@@ -205,40 +206,37 @@ export class ProfileComponent implements OnInit {
 
     this._bestParkingService.getReservations(reservationCode).subscribe(obj => {
 
-       console.log(obj);
-
-       if(obj.success === true) {
-
+         console.log(obj);
+         
          this.reservationValid = true;
          this.showReservationBox = true;
          this.balance = obj.reservation.fee;      
          this.reservationID = obj.reservation.id;
 
+         let hasReservation = obj.success;
          let reserveTime = obj.reservation.depart_dt; 
          let reservationPast = this.resolveTime(this.currentTime,reserveTime);
          let redeemed = obj.reservation.redeemed;
 
-         if(!redeemed && reservationPast) {
+         if(hasReservation && !redeemed && reservationPast) {
             this.hasBalance = true;
             this.isRedeemed = false;
             this.reservationMsg = this.pastReservationTime;
-         } else if(!redeemed && !reservationPast) {
+         } else if(hasReservation && !redeemed && !reservationPast) {
             this.hasBalance = true;
             this.isRedeemed = false;          
             this.reservationMsg = this.balancePaid + this.balance;        
-         } else if(redeemed && !reservationPast) {
+         } else if(hasReservation && redeemed && !reservationPast) {
             this.reservationMsg = this.usedReservation;     
+         } else if(!hasReservation) {
+           this.reservationValid = false;
+           this.reservationMsg = 'Sorry, '+obj.message;
          }
-
-       } else {
-         this.reservationValid = false;
-         this.reservationMsg = 'Sorry, '+obj.message;
-       }
 
     },
     error => { // 400, 404
       this.reservationValid = false;
-      this.reservationMsg = 'Sorry, reservation is either invalid or cannot be retrieved from Best Parking';      
+      this.reservationMsg = this.reservationError+'Best Parking';      
       console.log('Error in getting Best Parking Reservation');
     });
   }
@@ -246,10 +244,18 @@ export class ProfileComponent implements OnInit {
   updateReservationBP(model: Ticket, isValid: boolean) {
       let reservationCode = model.ticketReservationNo;
       console.log('ReservationID='+this.reservationID);
-      this._bestParkingService.updateReservations(this.reservationID,reservationCode).subscribe(res => {
-        console.log(res);
+      this._bestParkingService.updateReservations(this.reservationID,reservationCode).subscribe(obj => {
+        
+         let success:boolean = obj.success;
+
+         if(success === false) {
+            this.reservationMsg = this.reservationError+'Best Parking';      
+            console.log('Error in getting Best Parking Reservation');
+         } else {
+            this.validateTicket();
+         }
+
       });
-      //this.validateTicket();
   }  
 
   getReservationPW(model: Ticket, isValid: boolean) {
@@ -283,8 +289,7 @@ export class ProfileComponent implements OnInit {
 
     },
     error => { // 400, 404
-      this.reservationValid = false;
-      this.reservationMsg = 'Sorry, reservation is either invalid or cannot be retrieved from Park Whiz';
+      this.reservationMsg = this.reservationError+'Park Whiz';      
       console.log('Error in getting Park Whiz Reservation');
     });
   }  
@@ -299,7 +304,7 @@ export class ProfileComponent implements OnInit {
   // Sets pipe to find corresponding reservation
   filterReservationSH(model:Ticket, isValid:boolean) {
     console.log('SpotHero ticket: '+model.ticketReservationNo);
-        this.validateAggregator = true;
+    this.validateAggregator = true;
     this.spotHeroBarcode = model.ticketReservationNo;    
     console.log(this.spotHeroBarcode);
   }

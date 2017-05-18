@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, RequestMethod, URLSearchParams } from '@angular/http';
 import { bestParkingAPI } from '../../../server/routes/BestParkingDB';
 import 'rxjs/add/operator/map';
 
@@ -42,23 +42,31 @@ export class BestParkingService {
     let digest = this._bestParkingAPI.createDigest(data);
 
     console.log(data);
-    console.log(digest);
+    console.log(typeof digest +' '+ digest);
     console.log(this._bestParkingAPI.timestamp)
-
-    let params = new URLSearchParams();         
-    params.append('digest', digest);    
-    params.append('id', reservation_id);
+    
+    let params = new URLSearchParams(); 
+    params.append('digest', digest);         
     params.append('redeemed', 'true'); 
     params.append('timestamp', this._bestParkingAPI.timestamp);    
-    params.append('username', this._bestParkingAPI.user);   
-    
-    let headers = new Headers();
-    headers.append('Content-Type','application/json');
-    let url = this.hostDev + this._bestParkingAPI.updateReservationUrl + reservation_id + '.json?'+params.toString();
+    params.append('username', this._bestParkingAPI.user);
+
+    let body = {
+      "digest":digest,
+      "redeemed":true,
+      "timestamp":this._bestParkingAPI.timestamp,
+      "username":this._bestParkingAPI.user
+    }
+
+    let bodyStr = JSON.stringify(body);
+    let headers = new Headers({'content-type':'application/json'});
+
+    let url = this.hostDev + this._bestParkingAPI.updateReservationUrl+reservation_id+'.json';
+    let req = new RequestOptions({method:RequestMethod.Post,body:params});
 
     console.log(url);
 
-    return this.http.post(url,params,headers).map((res: Response) => res.json());       
+    return this.http.request(url,req).map((res: Response) => res.json());       
   }
 
 
