@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit {
   public balancePaid:string = 'You current reservation is paid for up to $';
   public cancelledReservation:string = 'Reservation has been cancelled and cannot be reused';
   public usedReservation: string = 'Reservation has been previously used';
-  public reservationError:string = 'Sorry, reservation is either invalid or cannot be retrieved from';
+  public reservationError:string = 'Sorry, reservation is either invalid or cannot be retrieved from ';
 
   constructor(private _profileService:ProfileService, private _ticketService:TicketService, private _bestParkingService: BestParkingService, private _parkWhizService: ParkWhizService, private _spotHeroService: SpotHeroService, private _route: ActivatedRoute) {
   }
@@ -93,7 +93,7 @@ export class ProfileComponent implements OnInit {
 
     // SpotHero RSS feed of reservation updating on 1 second interval
     this._spotHeroService.getFeed().subscribe(obj => {
-     //console.log(obj.feed.entry);
+     console.log(obj.feed.entry);
      this.spotHeroReservations = obj.feed.entry;
     }, error => {      
       console.log('Error in getting SpotHero Reservations\n'+error);      
@@ -179,6 +179,7 @@ export class ProfileComponent implements OnInit {
 
   resolveTime(currentTime:any, reservationEnd:any) {
     if(currentTime > reservationEnd) {
+      console.log(currentTime+'\n'+reservationEnd);
       return true;
     } else {
       return false;
@@ -207,7 +208,7 @@ export class ProfileComponent implements OnInit {
     this._bestParkingService.getReservations(reservationCode).subscribe(obj => {
 
          console.log(obj);
-         
+
          this.reservationValid = true;
          this.showReservationBox = true;
          this.balance = obj.reservation.fee;      
@@ -244,7 +245,7 @@ export class ProfileComponent implements OnInit {
   updateReservationBP(model: Ticket, isValid: boolean) {
       let reservationCode = model.ticketReservationNo;
       console.log('ReservationID='+this.reservationID);
-      this._bestParkingService.updateReservations(this.reservationID,reservationCode).subscribe(obj => {
+      this._bestParkingService.updateReservations(this.reservationID).subscribe(obj => {
         
          let success:boolean = obj.success;
 
@@ -274,7 +275,7 @@ export class ProfileComponent implements OnInit {
         let reservationPast = this.resolveTime(this.currentTime,reserveTime);
 
         if(status === 'valid' && reservationPast) {
-          this.reservationMsg = this.pastReservationTime +'\n'+this.balancePaid;
+          this.reservationMsg = this.pastReservationTime +'\n'+this.balancePaid + this.balance;
           this.hasBalance = true;
           this.isRedeemed = false;        
         } else if(status === 'valid' && !reservationPast) {

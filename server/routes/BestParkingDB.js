@@ -38,8 +38,6 @@ var bestParkingAPI = (function () {
             case 'redeem':
                 var id = value;
                 var redeemed = true;
-                console.log(typeof id + ' ' + id);
-                console.log(typeof redeemed + ' ' + redeemed);
                 return this.data = conv(id + "|" + redeemed + "|" + timestamp + "|" + username, { out: 'utf8' }); // value = reservation id	     	        
             default:
                 this.data = conv(timestamp + "|" + username, { out: 'utf8' });

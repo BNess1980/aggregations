@@ -23,7 +23,6 @@ export class bestParkingAPI {
 	private currDate = new Date();
 	public date = moment(this.currDate).format('YYYY-MM-DD');
 	public timestamp = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-	//public timestamp = moment().format('YYYY-MM-DDTHH:mm:ss');
 
 	public data:string;
 	public value:string; // Used for either barcode or facility
@@ -48,11 +47,13 @@ export class bestParkingAPI {
 		   let facility = value;
 	       return this.data = conv(`${date}|${facility}|${timestamp}|${username}`,{out:'utf8'}); // value = facility
 	     case 'redeem':
+	       console.log('XXXX'+typeof value);
 	       let id = value;
 	       let redeemed = true;
-	       console.log(typeof id +' '+ id);
-	       console.log(typeof redeemed +' '+ redeemed);
-	       return this.data = conv(`${id}|${redeemed}|${timestamp}|${username}`,{out:'utf8'}); // value = reservation id	     	        
+	       this.data = conv(`${id}|${redeemed}|${timestamp}|${username}`,{out:'utf8'}); // value = reservation id	  
+	       //debugger;
+	       console.log(this.data);
+	       return this.data;   	        
 	     default:
 		   this.data = conv(`${timestamp}|${username}`,{out:'utf8'});
 		   return this.data;  
